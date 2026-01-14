@@ -324,7 +324,7 @@
       </div>
 
       <div class="login-actions">
-        <button class="btn" id="btnLogin" type="button" onclick="doLogin(event)">Log in</button>
+        <button class="btn" id="btnLogin" type="button">Log in</button>
       </div>
 
       <div id="loginError" class="notice danger hidden login-error">
@@ -732,18 +732,15 @@
     const btn  = document.getElementById('btnLogin');
     const user = document.getElementById('loginUsername');
     const pass = document.getElementById('loginPassword');
-  
-    // ถ้ายังหา element ไม่เจอ แปลว่า DOM ยังไม่พร้อม -> ไม่ต้อง bind ตอนนี้
     if(!btn || !user || !pass) return;
-  
+    
     // กัน bind ซ้ำ (เพราะเราเรียกตอน DOMContentLoaded แน่ ๆ)
     if(btn.dataset.bound === '1') return;
     btn.dataset.bound = '1';
   
     // bind
-    btn.addEventListener('click', doLogin);
-    user.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
-    pass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
+   user.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
+   pass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
   }
   
   // ✅ bind แค่ตอน DOM พร้อม (ชัวร์สุด)
