@@ -626,11 +626,8 @@
       <!-- PAGE 2 -->
       <section id="page2" class="hidden"> <div class="cards">
           <div class="card">
-            <h3>
-              <span>Care & Wash Instructions</span>
-            </h3>
+            <h3><span>Care & Wash Instructions</span></h3>
             <div class="body">
-    
               <div id="p2NoStyle" class="notice warn">
                 <div class="icon">!</div>
                 <div class="txt">กรุณาเลือก Style ก่อน</div>
@@ -652,7 +649,7 @@
                     <p class="section-title">Carry Over (Reference)</p>
                     <div class="row" style="margin-top:10px;">
                       <div class="field" style="min-width:220px;">
-                        <label>Reference Season (เฉพาะ Carry Over)</label>
+                        <!-- <label>Reference Season (เฉพาะ Carry Over)</label> -->
                         <select id="refSeason" disabled>
                           <option value="">-</option>
                           <option value="SS25">SS25</option>
@@ -1173,11 +1170,8 @@ function showLogin(){
     content.classList.remove('hidden');
 
     document.getElementById('p2StyleNo').textContent = s.styleNo;
-    document.getElementById('p2StyleName').textContent = s.styleName;
     document.getElementById('p2Season').textContent = s.season;
-    document.getElementById('p2Gender').textContent = s.gender;
     document.getElementById('p2DevType').textContent = s.developmentType;
-    document.getElementById('p2StyleStatus').textContent = s.styleStatus || '-';
     document.getElementById('p2BU').textContent = s.bu || '-';
 
     const isCarry = s.developmentType === 'CARRY OVER';
