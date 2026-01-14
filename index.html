@@ -698,7 +698,8 @@
                 </div>
     
                 <div class="hr"></div>
-    
+                <div id="saveStatusBox" style="margin-top:12px;"></div>
+
                 <div class="notice danger hidden" id="careValidationBanner">
                   <div class="icon">!</div>
                   <div class="txt" id="careValidationText">
@@ -1208,9 +1209,10 @@ function showLogin(){
     renderCareBlocks(s, materials);
 
     const saveBox = document.getElementById('saveStatusBox');
-    if(state.labSaved && state.labSaved.styleId === s.id){
-      saveBox.innerHTML = `
-        <div class="notice info">
+    if(saveBox){
+      if(state.labSaved && state.labSaved.styleId === s.id){
+        saveBox.innerHTML = `
+          <div class="notice info">
           <div class="icon">✓</div>
           <div class="txt">
             บันทึกข้อมูลแล้ว: <span class="mono">${escapeHtml(state.labSaved.savedAt)}</span><br/>
@@ -1223,6 +1225,7 @@ function showLogin(){
           <div class="icon">i</div>
           <div class="txt">ยังไม่มีการบันทึกข้อมูล Care Label</div>
         </div>`;
+      }
     }
 
     document.getElementById('careValidationBanner').classList.add('hidden');
