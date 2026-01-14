@@ -6,12 +6,10 @@
   <title>TTG-CARE&WASH INSTRUCTIONS</title>
 
   <style>
-     /* ==============================
-       Sidebar Layout
-    ============================== */
+  /* ============================== Sidebar Layout ============================== */
     .app-shell{
       display:flex;
-      min-height:100vh;
+      height: 100vh;     
       background: var(--bg);
     }
   
@@ -27,6 +25,7 @@
       padding:14px;
       gap:12px;
       transition: width .2s ease;
+      overflow: hidden;
     }
   
     /* collapsed */
@@ -35,7 +34,11 @@
     .sidebar-collapsed #appSidebar .sb-subtext,
     .sidebar-collapsed #appSidebar .sb-hide-when-collapsed{ display:none !important; }
     .sidebar-collapsed #appSidebar .sb-btn{ justify-content:center; }
-  
+
+    html, body { height: 100%; }
+    body { min-height: 100vh; }
+
+    
     .sb-brand{
       display:flex; align-items:center; gap:10px;
       padding:10px;
@@ -91,6 +94,10 @@
     .app-content{
       flex:1;
       min-width:0;
+      height: 100vh;
+      overflow: hidden;
+      display:flex;
+      flex-direction:column;
     }
     /* เดิม .wrap max-width 1200; ในโหมด sidebar ให้เต็มได้ */
     .app-content .wrap{
@@ -394,7 +401,14 @@
     .login-error{ margin-top: 12px; }
     .tiny{ font-size:11px; color: var(--muted); margin-top:10px; }
 
-    
+     #appShell #appMain.wrap{
+      flex:1;
+      width:100%;
+      max-width:100%;
+      margin:0;
+      padding:16px;
+      overflow:auto;
+    }
   </style>
 </head>
 
