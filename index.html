@@ -416,6 +416,7 @@
       flex: 1;
       min-width: 0;
       height: 100vh;
+      width: 100%;
       overflow: hidden;            /* กัน scroll ซ้อน */
       display: flex;
       flex-direction: column;
@@ -426,7 +427,13 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      max-width: 100% !important;
       min-height: 0;
+      width: 100%;
+      margin: 0 auto;
+    
+      overflow: auto;   /* ✅ เพิ่มบรรทัดนี้ */
+      padding: 16px;    /* (ถ้าต้องการ) */
     }
     
     /* แต่ละ page ให้ยืดเต็มพื้นที่ */
@@ -531,13 +538,13 @@
     <div class="sb-nav">
       <button class="sb-btn active tab" data-page="page1">
         <span class="sb-ico">1</span>
-        <span class="sb-text">Stylw Worklist</span>
+        <span class="sb-text">Style Worklist</span>
       </button>
 
-      <button class="sb-btn tab" data-page="page3">
+     <button class="sb-btn tab" data-page="page3">
         <span class="sb-ico">3</span>
         <span class="sb-text">Order Form</span>
-      </button>
+     </button>
     </div>
 
     <div class="sb-bottom">
