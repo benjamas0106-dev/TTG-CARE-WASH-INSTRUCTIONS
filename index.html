@@ -6,6 +6,10 @@
   <title>TTG-CARE&WASH INSTRUCTIONS</title>
 
   <style>
+    #loginError{ display:flex; }
+    #loginError.hidden{ display:none !important; }
+    
+    
     :root{
       /* Light theme */
       --bg:#ffffff;
@@ -294,6 +298,8 @@
     .login-actions .btn{ width: 100%; }
     .login-error{ margin-top: 12px; }
     .tiny{ font-size:11px; color: var(--muted); margin-top:10px; }
+
+    
   </style>
 </head>
 
@@ -759,8 +765,10 @@
     btn.dataset.bound = '1';
   
     // bind
-   user.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
-   pass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
+    btn.addEventListener('click', doLogin);
+    
+    user.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
+    pass.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') doLogin(e); });
   }
   
   // ✅ bind แค่ตอน DOM พร้อม (ชัวร์สุด)
