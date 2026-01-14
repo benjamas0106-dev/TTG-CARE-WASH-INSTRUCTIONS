@@ -436,9 +436,9 @@
     }
     
     /* กล่อง cards ให้ยืดเต็มสูง และให้ card ยืดตาม */
-    #page1 .cards,
-    #page2 .cards,
-    #page3 .cards{
+      #page1 .cards,
+      #page2 .cards,
+      #page3 .cards{
       height: 100%;
       min-height: 0;
       align-content: stretch;
@@ -563,7 +563,6 @@
         <div class="card">
           <h3>
             <span>Style Worklist</span>
-            <span class="chip">Filter: <strong>Stage = SMS</strong></span>
           </h3>
           <div class="body">
   
@@ -609,26 +608,17 @@
                   <option>DROP</option>
                 </select>
               </div>
-  
               <div class="spacer"></div>
-  
-              <button class="btn ghost" id="resetFilters">Reset</button>
             </div>
-  
             <div class="hr"></div>
-  
             <div class="notice info">
               <div class="icon">i</div>
-              <div class="txt">
-                แสดงเฉพาะรายการที่มี BOM อยู่ใน <span class="mono">Stage: SMS</span>.
-                <br/>Sport Category (BU) และ Style Status เป็นข้อมูลอ้างอิง — ไม่มีไม่ Block การทำงาน.
-              </div>
             </div>
-  
             <div class="table-scroll" style="margin-top:12px;">
               <table>
                 <thead>
                   <tr>
+                    <th class="right" style="min-width:110px">Action</th>
                     <th style="min-width:70px">Style Image</th>
                     <th style="min-width:120px">Style No</th>
                     <th style="min-width:160px">Style Name</th>
@@ -644,7 +634,6 @@
                     <th style="min-width:110px">T1 Develop</th>
                     <th style="min-width:140px">Development Type</th>
                     <th style="min-width:140px">Status Indicator</th>
-                    <th class="right" style="min-width:110px">Action</th>
                   </tr>
                 </thead>
                 <tbody id="styleTbody"></tbody>
@@ -1156,6 +1145,9 @@ function showLogin(){
 
       return `
         <tr>
+          <td class="right">
+            <button class="btn" onclick="selectStyle('${s.id}')">Select</button>
+          </td>
           <td><div class="imgph" title="Style Image (Mock)"></div></td>
           <td class="mono">${escapeHtml(s.styleNo)}</td>
           <td>${escapeHtml(s.styleName)}</td>
@@ -1171,9 +1163,6 @@ function showLogin(){
           <td>${escapeHtml(s.t1Develop)}</td>
           <td><span class="badge">${escapeHtml(s.developmentType)}</span></td>
           <td>${indicatorBadge}</td>
-          <td class="right">
-            <button class="btn" onclick="selectStyle('${s.id}')">Select</button>
-          </td>
         </tr>
       `;
     }).join('');
