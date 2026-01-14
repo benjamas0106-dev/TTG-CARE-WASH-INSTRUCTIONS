@@ -423,12 +423,43 @@
     
     /* ให้ main เป็นพื้นที่ scroll และกินความสูงที่เหลือทั้งหมด */
     #appShell #appMain.wrap{
-      flex: 1;                     /* กินพื้นที่แนวตั้งทั้งหมด */
-      height: 100%;                /* บังคับสูงเต็มใน container */
-      overflow: auto;              /* scroll อยู่ตรงนี้ */
-      max-width: 100% !important;
-      margin: 0 !important;
-      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+    
+    /* แต่ละ page ให้ยืดเต็มพื้นที่ */
+    #appMain > section{
+      flex: 1;
+      min-height: 0;
+    }
+    
+    /* กล่อง cards ให้ยืดเต็มสูง และให้ card ยืดตาม */
+    #page1 .cards,
+    #page2 .cards,
+    #page3 .cards{
+      height: 100%;
+      min-height: 0;
+      align-content: stretch;
+    }
+    
+    /* card ให้เป็น flex เพื่อให้ body ยืด */
+    .card{
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .card .body{
+      flex: 1;
+      min-height: 0;
+    }
+    
+    /* ทำให้พื้นที่ “ตาราง” กลายเป็น scroll และยืดกินพื้นที่ที่เหลือ */
+    .table-scroll{
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
     }
   </style>
 </head>
@@ -594,7 +625,7 @@
               </div>
             </div>
   
-            <div style="margin-top:12px; overflow:auto; max-height: 520px;">
+            <div class="table-scroll" style="margin-top:12px;">
               <table>
                 <thead>
                   <tr>
