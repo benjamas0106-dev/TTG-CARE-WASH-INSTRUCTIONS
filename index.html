@@ -461,6 +461,11 @@
       min-height: 0;
       overflow: auto;
     }
+
+    /* Page 1 now has only one card */
+    #page1 .cards{
+      grid-template-columns: 1fr !important;
+    }
   </style>
 </head>
 
@@ -529,11 +534,6 @@
         <span class="sb-text">Page 1 • Worklist</span>
       </button>
 
-      <button class="sb-btn tab" data-page="page2">
-        <span class="sb-ico">2</span>
-        <span class="sb-text">Page 2 • BOM & Care</span>
-      </button>
-
       <button class="sb-btn tab" data-page="page3">
         <span class="sb-ico">3</span>
         <span class="sb-text">Page 3 • Purchasing</span>
@@ -559,16 +559,12 @@
   <div class="app-content">
     <main id="appMain" class="wrap">
       <!-- PAGE 1 -->
-      <section id="page1"> <div class="cards">
-        <div class="card">
-          <h3>
-            <span>Style Worklist</span>
-          </h3>
+      <section id="page1"> 
+      <div class="cards">
+        <div class="card"><h3><span>Style Worklist</span></h3>
           <div class="body">
-  
             <div class="row">
-              <div class="field" style="min-width:220px">
-                <label>Search (Style No / Style Name)</label>
+              <div class="field" style="min-width:220px"><label>Search (Style No / Style Name)</label>
                 <input id="searchStyle" placeholder="เช่น RBK-SS26-001 / Runner Tee" />
               </div>
   
@@ -641,16 +637,6 @@
             </div>
           </div>
         </div>
-  
-          <div class="card">
-            <h3>Selected Style (Context)</h3>
-            <div class="body" id="selectedStyleCard">
-              <div class="notice warn">
-                <div class="icon">!</div>
-                <div class="txt">ยังไม่ได้เลือก Style — เลือกจาก Worklist เพื่อไปทำงานต่อใน Page 2</div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -1168,7 +1154,6 @@ function showLogin(){
     }).join('');
 
     tbody.innerHTML = rows || `<tr><td colspan="16" class="muted">No results</td></tr>`;
-    renderSelectedStyleCard();
   }
 
   function renderSelectedStyleCard(){
@@ -1203,12 +1188,17 @@ function showLogin(){
 
   window.selectStyle = function(styleId){
     state.selectedStyleId = styleId;
+  
+    // ถ้าเปลี่ยน Style ให้ reset ข้อมูลที่เคย save ของ style เก่า (คง logic เดิมไว้)
     if(state.labSaved?.styleId !== styleId){
       state.labSaved = null;
     }
+  
     logAudit(`Selected Style: ${styles.find(s=>s.id===styleId)?.styleNo || styleId}`);
-    renderSelectedStyleCard();
-  }
+  
+    // ✅ เด้งไปหน้า Page 2 ทันที
+    setPage('page2');
+  };
   window.goToPage2 = function(){ setPage('page2'); }
   window.goToPage3 = function(){ setPage('page3'); }
 
