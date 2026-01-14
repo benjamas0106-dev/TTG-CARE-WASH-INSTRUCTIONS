@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TTG25058 - Order Form MMP AD REEBOK (Prototype)</title>
+  <style>
+    :root{
+      /* Light theme */
+      --bg:#ffffff;
+      --card:#ffffff;
+      --card2:#f8fafc;
+      --muted:#6b7280;   /* gray-500 */
+      --text:#374151;    /* gray-700 */
+      --accent:#16a34a;
+      --warn:#d97706;
+      --danger:#dc2626;
+      --line:#e5e7eb;    /* gray-200 */
+      --chip:#f3f4f6;    /* gray-100 */
+      --btn:#2563eb;
+      --btn2:#64748b;
+      --shadow: 0 10px 24px rgba(15, 23, 42, .10);
+      --radius: 16px;
+      --focus: 0 0 0 3px rgba(37,99,235,.15);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color:var(--text);
+    }
+
+    /* App layout visibility */
+    .app-hidden{ display:none !important; }
+
+    header{
+      position:sticky; top:0; z-index:20;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .wrap{max-width:1200px; margin:0 auto; padding:16px;}
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+    }
+    .brand{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:40px; height:40px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(22,163,74,.85));
+      box-shadow: var(--shadow);
+    }
+    .title{ display:flex; flex-direction:column; line-height:1.1; }
+    .title b{font-size:14px}
+    .title span{font-size:12px; color:var(--muted)}
+    .nav{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+    .tab{
+      border:1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-size:13px;
+      box-shadow: 0 1px 0 rgba(15,23,42,.03);
+    }
+    .tab.active{
+      border-color: rgba(22,163,74,.35);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.12) inset;
+    }
+
+    .role-pill{
+      padding:8px 10px;
+      border-radius:999px;
+      background: #fff;
+      border:1px solid var(--line);
+      font-size:12px;
+      color:var(--muted);
+      display:flex; align-items:center; gap:8px;
+    }
+    .dot{width:8px; height:8px; border-radius:50%;}
+    .dot.lab{background:var(--accent)}
+    .dot.pur{background:var(--btn)}
+    .grid{ display:grid; gap:16px; }
+    .cards{ display:grid; grid-template-columns: 1fr; gap:16px; }
+    @media (min-width: 1000px){
+      .cards{ grid-template-columns: 1.25fr .75fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card h3{
+      margin:0;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      font-size:14px;
+      letter-spacing:.2px;
+      display:flex; align-items:center; justify-content:space-between;
+      background: var(--card2);
+    }
+    .card .body{padding:14px 16px;}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .spacer{flex:1}
+
+    input, select, textarea{
+      width:100%;
+      background: #fff;
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius: 12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(37,99,235,.45);
+      box-shadow: var(--focus);
+    }
+
+    .field{ display:grid; gap:6px; min-width: 180px; }
+    .field label{font-size:12px; color:var(--muted)}
+
+    .btn{
+      border:0;
+      background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(37,99,235,.75));
+      color:white;
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      box-shadow: 0 8px 16px rgba(37,99,235,.12);
+    }
+    .btn.secondary{ background: rgba(100,116,139,.9); box-shadow:none; }
+    .btn.ghost{
+      background: transparent;
+      border:1px solid var(--line);
+      color: var(--text);
+      box-shadow:none;
+    }
+    .btn.danger{
+      background: linear-gradient(135deg, rgba(220,38,38,.95), rgba(220,38,38,.75));
+    }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .chip{
+      display:inline-flex;
+      align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius: 999px;
+      background: var(--chip);
+      border:1px solid var(--line);
+      font-size:12px;
+      color: var(--muted);
+    }
+    .chip strong{color:var(--text); font-weight:600}
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: #fff;
+    }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      font-size:12px;
+      vertical-align:top;
+    }
+    th{
+      text-align:left;
+      color: var(--muted);
+      font-weight:600;
+      background: var(--card2);
+      position:sticky; top:0;
+    }
+    tr:last-child td{border-bottom:0}
+
+    .imgph{
+      width:42px; height:42px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(107,114,128,.20), rgba(107,114,128,.08));
+      border:1px solid var(--line);
+    }
+
+    .badge{
+      display:inline-flex; align-items:center;
+      padding:4px 8px; border-radius:999px;
+      font-size:11px; font-weight:700;
+      border:1px solid var(--line);
+      background: var(--chip);
+      color: var(--text);
+    }
+    .badge.new{
+      border-color: rgba(22,163,74,.35);
+      background: rgba(22,163,74,.10);
+      color: #166534;
+    }
+    .badge.changed{
+      border-color: rgba(217,119,6,.35);
+      background: rgba(217,119,6,.10);
+      color: #92400e;
+    }
+    .badge.drop{
+      border-color: rgba(220,38,38,.35);
+      background: rgba(220,38,38,.10);
+      color: #991b1b;
+    }
+
+    .notice{
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: var(--card2);
+      display:flex; gap:10px;
+      align-items:flex-start;
+    }
+    .notice .icon{
+      width:18px; height:18px;
+      border-radius:6px;
+      display:inline-flex;
+      align-items:center; justify-content:center;
+      font-size:12px;
+      margin-top:1px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    .notice.info .icon{ color:#1d4ed8 }
+    .notice.warn .icon{ color:#b45309 }
+    .notice.danger .icon{ color:#b91c1c }
+    .notice .txt{font-size:12px; color:var(--muted); line-height:1.4}
+
+    .split{ display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media (min-width: 900px){
+      .split{grid-template-columns: 1fr 1fr;}
+    }
+    .section-title{
+      font-size:12px;
+      color: var(--muted);
+      margin:0 0 10px 0;
+      letter-spacing:.2px;
+    }
+    .hr{height:1px; background: var(--line); margin:12px 0;}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
+    .hidden{display:none !important}
+    .right{ text-align:right }
+
+    /* ------------------------------
+       Login Screen
+    ------------------------------ */
+    .login-wrap{
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+      background: #fff;
+    }
+    .login-card{
+      width: min(520px, 100%);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .login-head{
+      padding:18px 18px 14px 18px;
+      background: var(--card2);
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .login-head .logo{
+      width:44px; height:44px; border-radius:14px;
+    }
+    .login-head .meta{
+      display:flex; flex-direction:column; line-height:1.2;
+    }
+    .login-head .meta b{font-size:14px}
+    .login-head .meta span{font-size:12px; color:var(--muted)}
+    .login-body{ padding: 18px; }
+    .login-actions{ display:flex; gap:10px; align-items:center; margin-top: 14px; }
+    .login-actions .btn{ width: 100%; }
+    .login-error{ margin-top: 12px; }
+    .tiny{ font-size:11px; color: var(--muted); margin-top:10px; }
+  </style>
+</head>
+
+<body>
+
+<!-- ==============================
+     LOGIN PAGE (Show first)
+============================== -->
+<section id="loginPage" class="login-wrap">
+  <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="login-head">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="meta">
+        <b id="loginTitle">TTG-CARE&WASH INSTRUCTIONS</b>
+        <span>เข้าสู่ระบบเพื่อใช้งานโปรแกรม</span>
+      </div>
+    </div>
+
+    <div class="login-body">
+      <div class="field">
+        <label>Username</label>
+        <input id="loginUsername" autocomplete="username" placeholder="กรอก Username" />
+      </div>
+
+      <div class="field" style="margin-top:10px;">
+        <label>Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="กรอก Password" />
+      </div>
+
+      <div class="login-actions">
+        <button class="btn" id="btnLogin" type="button">Log in</button>
+      </div>
+
+      <div id="loginError" class="notice danger hidden login-error">
+        <div class="icon">!</div>
+        <div class="txt">ไม่สามารถเข้าใช้งานได้</div>
+      </div>
+
+      <div class="tiny">
+        * Prototype: ตรวจสอบรหัสแบบ Hardcoded (แก้ได้ใน JS ส่วน <span class="mono">AUTH</span>)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     APP (Hidden until login)
+============================== -->
+<header id="appHeader" class="app-hidden">
+  <div class="wrap topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="title">
+        <b>TTG-CARE&WASH INSTRUCTIONS</b>
+        <!-- <span>Prototype UI (LAB / Purchasing) • Single-file HTML</span> -->
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="tab active" data-page="page1">Page 1 • Style Worklist</button>
+      <button class="tab" data-page="page2">Page 2 • BOM & Care Selection</button>
+      <button class="tab" data-page="page3">Page 3 • Purchasing Review</button>
+
+      <div class="role-pill" title="จำลอง Role">
+        <span class="dot lab" id="roleDot"></span>
+        <span id="roleLabel">Role: LAB</span>
+        <span class="spacer"></span>
+        <select id="roleSelect" style="width:160px; padding:8px 10px; border-radius:999px;">
+          <option value="LAB" selected>LAB</option>
+          <option value="PUR">Purchasing</option>
+        </select>
+      </div>
+
+      <button class="btn ghost" id="btnLogout" title="ออกจากระบบ">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main id="appMain" class="wrap app-hidden">
+  <!-- PAGE 1 -->
+  <section id="page1">
+    <div class="cards">
+      <div class="card">
+        <h3>
+          <span>Style Worklist</span>
+          <span class="chip">Filter: <strong>Stage = SMS</strong></span>
+        </h3>
+        <div class="body">
+
+          <div class="row">
+            <div class="field" style="min-width:220px">
+              <label>Search (Style No / Style Name)</label>
+              <input id="searchStyle" placeholder="เช่น RBK-SS26-001 / Runner Tee" />
+            </div>
+
+            <div class="field">
+              <label>Season</label>
+              <select id="filterSeason">
+                <option value="">All</option>
+                <option>SS26</option>
+                <option>FW25</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Gender</label>
+              <select id="filterGender">
+                <option value="">All</option>
+                <option>Men</option>
+                <option>Women</option>
+                <option>Unisex</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Development Type</label>
+              <select id="filterDevType">
+                <option value="">All</option>
+                <option>NEW STYLE</option>
+                <option>CARRY OVER</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Style Status (Reference)</label>
+              <select id="filterStyleStatus">
+                <option value="">All</option>
+                <option>IN RANGE</option>
+                <option>DROP</option>
+              </select>
+            </div>
+
+            <div class="spacer"></div>
+
+            <button class="btn ghost" id="resetFilters">Reset</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="notice info">
+            <div class="icon">i</div>
+            <div class="txt">
+              แสดงเฉพาะรายการที่มี BOM อยู่ใน <span class="mono">Stage: SMS</span>.
+              <br/>Sport Category (BU) และ Style Status เป็นข้อมูลอ้างอิง — ไม่มีไม่ Block การทำงาน.
+            </div>
+          </div>
+
+          <div style="margin-top:12px; overflow:auto; max-height: 520px;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="min-width:70px">Style Image</th>
+                  <th style="min-width:120px">Style No</th>
+                  <th style="min-width:160px">Style Name</th>
+                  <th>Season</th>
+                  <th>Gender</th>
+                  <th>Base Size</th>
+                  <th style="min-width:160px">Product Name</th>
+                  <th style="min-width:110px">Style Status</th>
+                  <th>Stage</th>
+                  <th style="min-width:120px">Product Type</th>
+                  <th style="min-width:150px">Sport Category (BU)</th>
+                  <th style="min-width:130px">Buy Ready Date</th>
+                  <th style="min-width:110px">T1 Develop</th>
+                  <th style="min-width:140px">Development Type</th>
+                  <th style="min-width:140px">Status Indicator</th>
+                  <th class="right" style="min-width:110px">Action</th>
+                </tr>
+              </thead>
+              <tbody id="styleTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Selected Style (Context)</h3>
+        <div class="body" id="selectedStyleCard">
+          <div class="notice warn">
+            <div class="icon">!</div>
+            <div class="txt">ยังไม่ได้เลือก Style — เลือกจาก Worklist เพื่อไปทำงานต่อใน Page 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section id="page2" class="hidden">
+    <div class="cards">
+      <div class="card">
+        <h3>
+          <span>Style Detail & BOM (Stage: SMS)</span>
+          <span class="chip">Role: <strong>LAB</strong></span>
+        </h3>
+        <div class="body">
+
+          <div id="p2NoStyle" class="notice warn">
+            <div class="icon">!</div>
+            <div class="txt">กรุณาเลือก Style จาก Page 1 ก่อน</div>
+          </div>
+
+          <div id="p2Content" class="hidden">
+            <div class="split">
+              <div>
+                <p class="section-title">Style Information</p>
+                <div class="row">
+                  <span class="chip">Style No: <strong id="p2StyleNo">-</strong></span>
+                  <span class="chip">Style Name: <strong id="p2StyleName">-</strong></span>
+                  <span class="chip">Season: <strong id="p2Season">-</strong></span>
+                  <span class="chip">Gender: <strong id="p2Gender">-</strong></span>
+                  <span class="chip">Development Type: <strong id="p2DevType">-</strong></span>
+                  <span class="chip">Style Status: <strong id="p2StyleStatus">-</strong></span>
+                  <span class="chip">Sport Category (BU): <strong id="p2BU">-</strong></span>
+                </div>
+                <div class="notice info" style="margin-top:10px;">
+                  <div class="icon">i</div>
+                  <div class="txt">
+                    BU และ Style Status ใช้เพื่อการอ้างอิงเท่านั้น (ไม่มีไม่ Block).<br/>
+                    Composition (%) แสดงตาม BOM (ไม่คำนวณ/ไม่ปรับค่า).
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p class="section-title">Carry Over (Reference)</p>
+                <div class="notice warn" id="carryInfo">
+                  <div class="icon">!</div>
+                  <div class="txt">หาก Development Type = CARRY OVER สามารถอ้างอิง Season ก่อนหน้าเป็นค่าเริ่มต้นได้ (แก้ไขได้ก่อน Save)</div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                  <div class="field" style="min-width:220px;">
+                    <label>Reference Season (เฉพาะ Carry Over)</label>
+                    <select id="refSeason" disabled>
+                      <option value="">-</option>
+                      <option value="SS25">SS25</option>
+                      <option value="FW24">FW24</option>
+                    </select>
+                  </div>
+                  <button class="btn secondary" id="btnLoadReference" disabled>Load Reference</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <p class="section-title">BOM / Fabric (Filtered by LAB Formula - Demo)</p>
+            <div style="overflow:auto; max-height: 260px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="min-width:140px">Material Code</th>
+                    <th style="min-width:220px">Material Name</th>
+                    <th style="min-width:160px">Composition (%)</th>
+                    <th style="min-width:110px" class="right">Usage %</th>
+                    <th style="min-width:140px">Included?</th>
+                  </tr>
+                </thead>
+                <tbody id="bomTbody"></tbody>
+              </table>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="notice danger hidden" id="careValidationBanner">
+              <div class="icon">!</div>
+              <div class="txt" id="careValidationText">
+                กรุณาเลือก Care Symbol อย่างน้อย 1 รายการสำหรับทุก Material ก่อนบันทึกข้อมูล
+              </div>
+            </div>
+
+            <p class="section-title" style="margin-top:10px;">Care Symbol & Extra Care Selection (ต่อ Material)</p>
+            <div id="careBlocks"></div>
+
+            <div class="hr"></div>
+
+            <div class="row">
+              <button class="btn ghost" id="btnBackToP1">Back to Worklist</button>
+              <div class="spacer"></div>
+              <button class="btn secondary" id="btnResetCare">Reset Selections</button>
+              <button class="btn" id="btnSaveCare">Save (LAB)</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Save Status</h3>
+        <div class="body" id="saveStatusBox">
+          <div class="notice info">
+            <div class="icon">i</div>
+            <div class="txt">ยังไม่มีการบันทึกข้อมูล Care Label</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section id="page3" class="hidden">
+    <div class="cards">
+      <div class="card">
+        <h3>
+          <span>Purchasing Review & Generate Order Form (AD PDF)</span>
+          <span class="chip">Role: <strong>Purchasing</strong></span>
+        </h3>
+        <div class="body">
+
+          <div id="p3NoData" class="notice warn">
+            <div class="icon">!</div>
+            <div class="txt">ต้องมีข้อมูลที่ LAB บันทึกก่อน จึงจะแสดงหน้านี้ได้ครบถ้วน</div>
+          </div>
+
+          <div id="p3Content" class="hidden">
+            <p class="section-title">Style Summary</p>
+            <div class="row">
+              <span class="chip">Style No: <strong id="p3StyleNo">-</strong></span>
+              <span class="chip">Season: <strong id="p3Season">-</strong></span>
+              <span class="chip">Development Type: <strong id="p3DevType">-</strong></span>
+              <span class="chip">Supplier Doc: <strong>Order Form (AD PDF)</strong></span>
+              <span class="spacer"></span>
+              <span class="badge" id="p3ReadyBadge">READY</span>
+            </div>
+
+            <div class="hr"></div>
+
+            <p class="section-title">LAB Saved Care Label</p>
+            <div style="overflow:auto; max-height: 260px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="min-width:140px">Material Code</th>
+                    <th style="min-width:220px">Material Name</th>
+                    <th style="min-width:160px">Composition (%)</th>
+                    <th style="min-width:220px">Care Symbol (Selected)</th>
+                    <th style="min-width:220px">Extra Care (Selected)</th>
+                  </tr>
+                </thead>
+                <tbody id="p3CareTbody"></tbody>
+              </table>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="split">
+              <div>
+                <p class="section-title">Fiber Text Position (Purchasing Editable)</p>
+                <div class="field">
+                  <label>Fiber Text Position</label>
+                  <input id="fiberPosition" placeholder="เช่น LEFT SIDE / NECK LABEL / HEM ..." />
+                </div>
+                <div class="notice info" style="margin-top:10px;">
+                  <div class="icon">i</div>
+                  <div class="txt">การแก้ไข Fiber Text Position ต้องไม่กระทบข้อมูลต้นทาง (Master BOM)</div>
+                </div>
+              </div>
+
+              <div>
+                <p class="section-title">Generate</p>
+                <div class="notice warn hidden" id="p3ValidationBanner">
+                  <div class="icon">!</div>
+                  <div class="txt" id="p3ValidationText"></div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                  <button class="btn secondary" id="btnPreviewPdf">Preview (Mock)</button>
+                  <button class="btn" id="btnGeneratePdf">Generate AD PDF (Mock)</button>
+                </div>
+                <div id="pdfResult" style="margin-top:12px;"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Audit / History (Mock)</h3>
+        <div class="body">
+          <div class="notice info">
+            <div class="icon">i</div>
+            <div class="txt">บันทึกเหตุการณ์ (Save/Reference/Generate) จะถูกแสดงที่นี่เพื่อรองรับการตรวจสอบย้อนหลัง</div>
+          </div>
+          <div class="hr"></div>
+          <div id="auditLog" class="mono" style="font-size:12px; color:var(--muted); line-height:1.6;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // เปลี่ยน user/pass ตรงนี้ได้เลย
+  const AUTH = { username: 'admin', password: '1234' };
+
+  function showLoginError(show){
+    const el = document.getElementById('loginError');
+    if(!el) return;
+    el.classList.toggle('hidden', !show);
+  }
+
+  function showApp(){
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('appHeader').classList.remove('app-hidden');
+    document.getElementById('appMain').classList.remove('app-hidden');
+  }
+
+  function showLogin(){
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('appHeader').classList.add('app-hidden');
+    document.getElementById('appMain').classList.add('app-hidden');
+    showLoginError(false);
+    const pw = document.getElementById('loginPassword');
+    if(pw) pw.value = '';
+  }
+
+  function doLogin(e){
+    if(e) e.preventDefault();
+
+    console.log('Login clicked'); // <-- เช็คว่ากดแล้วเข้าไหม
+
+    const u = (document.getElementById('loginUsername')?.value || '').trim();
+    const p = (document.getElementById('loginPassword')?.value || '').trim();
+
+    if(u === AUTH.username && p === AUTH.password){
+      showLoginError(false);
+      showApp();
+      if(typeof initAppOnce === 'function') initAppOnce();
+    }else{
+      showLoginError(true);
+    }
+  }
+
+  // bind events (พออันเดียว)
+   document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnLogin');
+    if(!btn){
+      console.error('❌ ไม่พบปุ่ม #btnLogin (เช็ค id ใน HTML)');
+      return;
+    }
+    btn.addEventListener('click', doLogin);
+
+    document.getElementById('loginUsername')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(e); });
+    document.getElementById('loginPassword')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(e); });
+
+    console.log('✅ Login events bound');
+  });
+
+  // ------------------------------
+  // Mock Data (เดิม)
+  // ------------------------------
+  const state = {
+    role: 'LAB',
+    page: 'page1',
+    selectedStyleId: null,
+    labSaved: null,         // { styleId, materials: [...], carryRef: {...}, savedAt }
+    audit: [],
+  };
+
+  const styles = [
+    {
+      id: 'S1',
+      styleNo: 'RBK-SS26-001',
+      styleName: 'Runner Tee',
+      season: 'SS26',
+      gender: 'Men',
+      baseSize: 'M',
+      productName: 'Performance Tee',
+      styleStatus: 'IN RANGE',
+      stage: 'SMS',
+      productType: 'Apparel',
+      bu: 'Running',
+      buyReadyDate: '2026-01-08',
+      t1Develop: 'YES',
+      developmentType: 'NEW STYLE',
+      indicator: 'NEW'
+    },
+    {
+      id: 'S2',
+      styleNo: 'RBK-SS26-014',
+      styleName: 'Studio Tank',
+      season: 'SS26',
+      gender: 'Women',
+      baseSize: 'S',
+      productName: 'Training Tank',
+      styleStatus: 'IN RANGE',
+      stage: 'SMS',
+      productType: 'Apparel',
+      bu: '',
+      buyReadyDate: '2026-01-12',
+      t1Develop: 'NO',
+      developmentType: 'CARRY OVER',
+      indicator: 'CHANGED'
+    },
+    {
+      id: 'S3',
+      styleNo: 'RBK-FW25-008',
+      styleName: 'Classic Hoodie',
+      season: 'FW25',
+      gender: 'Unisex',
+      baseSize: 'L',
+      productName: 'Fleece Hoodie',
+      styleStatus: 'DROP',
+      stage: 'DEV',
+      productType: 'Apparel',
+      bu: 'Lifestyle',
+      buyReadyDate: '2025-10-02',
+      t1Develop: 'YES',
+      developmentType: 'NEW STYLE',
+      indicator: 'CHANGED'
+    },
+  ];
+
+  const bomByStyle = {
+    S1: [
+      { code:'FAB-001', name:'Single Jersey', comp:'Cotton 60% / Polyester 40%', usage: 55 },
+      { code:'FAB-009', name:'Rib Collar', comp:'Cotton 95% / Spandex 5%', usage: 12 },
+      { code:'FAB-015', name:'Thread', comp:'Polyester 100%', usage: 4 },
+      { code:'FAB-020', name:'Mesh Panel', comp:'Polyester 100%', usage: 22 },
+    ],
+    S2: [
+      { code:'FAB-002', name:'Interlock', comp:'Polyester 88% / Spandex 12%', usage: 68 },
+      { code:'FAB-011', name:'Binding', comp:'Nylon 80% / Spandex 20%', usage: 9 },
+      { code:'FAB-021', name:'Inner Lining', comp:'Polyester 100%', usage: 18 },
+    ],
+  };
+
+  const masterCare = [
+    { id:'CW001', group:'Wash Instructions', label:'MACHINE WASH COLD' },
+    { id:'CW002', group:'Wash Instructions', label:'MACHINE WASH COLD GENTLE' },
+    { id:'CW005', group:'Wash Instructions', label:'HAND WASH' },
+    { id:'CB001', group:'Bleach Instructions', label:'ONLY NON-CHLORINE BLEACH WHEN NEEDED' },
+    { id:'CB002', group:'Bleach Instructions', label:'DO NOT BLEACH' },
+    { id:'CD001', group:'Dry Instructions', label:'TUMBLE DRY LOW' },
+    { id:'CD002', group:'Dry Instructions', label:'TUMBLE DRY MEDIUM' },
+    { id:'CD010', group:'Dry Instructions', label:'TUMBLE DRY HIGH' },
+  ];
+  const masterExtra = [
+    { id:'EC01', label:'DO NOT IRON ON PRINT' },
+    { id:'EC02', label:'WASH WITH LIKE COLORS' },
+    { id:'EC03', label:'DO NOT DRY CLEAN' },
+  ];
+
+  const carryOverRef = {
+    SS25: {
+      careByMaterialCode: {
+        'FAB-002': ['CW002','CB002','CD001'],
+        'FAB-021': ['CW001','CB001','CD002']
+      },
+      extraByMaterialCode: {
+        'FAB-002': ['EC02'],
+        'FAB-021': ['EC01']
+      }
+    },
+    FW24: {
+      careByMaterialCode: {
+        'FAB-002': ['CW001','CB002','CD001'],
+        'FAB-021': ['CW001','CB002','CD001']
+      },
+      extraByMaterialCode: {
+        'FAB-002': ['EC03'],
+        'FAB-021': []
+      }
+    }
+  };
+
+  // ------------------------------
+  // Helpers (เดิม)
+  // ------------------------------
+  function logAudit(msg){
+    const t = new Date().toLocaleString();
+    state.audit.unshift(`[${t}] ${msg}`);
+    renderAudit();
+  }
+  function renderAudit(){
+    const el = document.getElementById('auditLog');
+    el.innerHTML = state.audit.map(x => `<div>${escapeHtml(x)}</div>`).join('');
+  }
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[s]));
+  }
+  function setPage(pageId){
+    state.page = pageId;
+    document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(pageId).classList.remove('hidden');
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.page === pageId));
+
+    if(pageId === 'page1') renderPage1();
+    if(pageId === 'page2') renderPage2();
+    if(pageId === 'page3') renderPage3();
+  }
+  function setRole(role){
+    state.role = role;
+    const dot = document.getElementById('roleDot');
+    const label = document.getElementById('roleLabel');
+    dot.classList.toggle('lab', role === 'LAB');
+    dot.classList.toggle('pur', role === 'PUR');
+    label.textContent = `Role: ${role === 'LAB' ? 'LAB' : 'Purchasing'}`;
+
+    renderPage2();
+    renderPage3();
+  }
+  function getSelectedStyle(){
+    return styles.find(s => s.id === state.selectedStyleId) || null;
+  }
+  function filteredStyles(){
+    const q = document.getElementById('searchStyle')?.value?.trim().toLowerCase() || '';
+    const season = document.getElementById('filterSeason')?.value || '';
+    const gender = document.getElementById('filterGender')?.value || '';
+    const devType = document.getElementById('filterDevType')?.value || '';
+    const styleStatus = document.getElementById('filterStyleStatus')?.value || '';
+
+    return styles
+      .filter(s => s.stage === 'SMS')
+      .filter(s => !q || (s.styleNo.toLowerCase().includes(q) || s.styleName.toLowerCase().includes(q)))
+      .filter(s => !season || s.season === season)
+      .filter(s => !gender || s.gender === gender)
+      .filter(s => !devType || s.developmentType === devType)
+      .filter(s => !styleStatus || s.styleStatus === styleStatus);
+  }
+
+  // ------------------------------
+  // Page 1 Rendering (เดิม)
+  // ------------------------------
+  function renderPage1(){
+    const tbody = document.getElementById('styleTbody');
+    const rows = filteredStyles().map(s => {
+      const indicatorBadge =
+        s.indicator === 'NEW'
+          ? `<span class="badge new">NEW</span>`
+          : `<span class="badge changed">CHANGED</span>`;
+
+      const statusBadge =
+        s.styleStatus === 'DROP'
+          ? `<span class="badge drop">DROP</span>`
+          : `<span class="badge">${escapeHtml(s.styleStatus || '-')}</span>`;
+
+      const buText = s.bu ? escapeHtml(s.bu) : `<span class="muted">-</span>`;
+
+      return `
+        <tr>
+          <td><div class="imgph" title="Style Image (Mock)"></div></td>
+          <td class="mono">${escapeHtml(s.styleNo)}</td>
+          <td>${escapeHtml(s.styleName)}</td>
+          <td>${escapeHtml(s.season)}</td>
+          <td>${escapeHtml(s.gender)}</td>
+          <td>${escapeHtml(s.baseSize)}</td>
+          <td>${escapeHtml(s.productName)}</td>
+          <td>${statusBadge}</td>
+          <td><span class="badge">${escapeHtml(s.stage)}</span></td>
+          <td>${escapeHtml(s.productType)}</td>
+          <td>${buText}</td>
+          <td>${escapeHtml(s.buyReadyDate)}</td>
+          <td>${escapeHtml(s.t1Develop)}</td>
+          <td><span class="badge">${escapeHtml(s.developmentType)}</span></td>
+          <td>${indicatorBadge}</td>
+          <td class="right">
+            <button class="btn" onclick="selectStyle('${s.id}')">Select</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    tbody.innerHTML = rows || `<tr><td colspan="16" class="muted">No results</td></tr>`;
+    renderSelectedStyleCard();
+  }
+
+  function renderSelectedStyleCard(){
+    const box = document.getElementById('selectedStyleCard');
+    const s = getSelectedStyle();
+    if(!s){
+      box.innerHTML = `
+        <div class="notice warn">
+          <div class="icon">!</div>
+          <div class="txt">ยังไม่ได้เลือก Style — เลือกจาก Worklist เพื่อไปทำงานต่อใน Page 2</div>
+        </div>`;
+      return;
+    }
+    box.innerHTML = `
+      <div class="row">
+        <span class="chip">Style No: <strong class="mono">${escapeHtml(s.styleNo)}</strong></span>
+        <span class="chip">Style Name: <strong>${escapeHtml(s.styleName)}</strong></span>
+        <span class="chip">Season: <strong>${escapeHtml(s.season)}</strong></span>
+      </div>
+      <div class="hr"></div>
+      <div class="row">
+        <span class="chip">Development Type: <strong>${escapeHtml(s.developmentType)}</strong></span>
+        <span class="chip">Style Status (Ref): <strong>${escapeHtml(s.styleStatus || '-')}</strong></span>
+        <span class="chip">BU (Ref): <strong>${escapeHtml(s.bu || '-')}</strong></span>
+      </div>
+      <div style="margin-top:12px" class="row">
+        <button class="btn" onclick="goToPage2()">Proceed to Page 2</button>
+        <button class="btn ghost" onclick="goToPage3()">Go to Page 3</button>
+      </div>
+    `;
+  }
+
+  window.selectStyle = function(styleId){
+    state.selectedStyleId = styleId;
+    if(state.labSaved?.styleId !== styleId){
+      state.labSaved = null;
+    }
+    logAudit(`Selected Style: ${styles.find(s=>s.id===styleId)?.styleNo || styleId}`);
+    renderSelectedStyleCard();
+  }
+  window.goToPage2 = function(){ setPage('page2'); }
+  window.goToPage3 = function(){ setPage('page3'); }
+
+  // ------------------------------
+  // Page 2 Rendering + Logic (เดิม)
+  // ------------------------------
+  function renderPage2(){
+    const s = getSelectedStyle();
+    const noStyle = document.getElementById('p2NoStyle');
+    const content = document.getElementById('p2Content');
+
+    if(!s){
+      noStyle.classList.remove('hidden');
+      content.classList.add('hidden');
+      return;
+    }
+    noStyle.classList.add('hidden');
+    content.classList.remove('hidden');
+
+    document.getElementById('p2StyleNo').textContent = s.styleNo;
+    document.getElementById('p2StyleName').textContent = s.styleName;
+    document.getElementById('p2Season').textContent = s.season;
+    document.getElementById('p2Gender').textContent = s.gender;
+    document.getElementById('p2DevType').textContent = s.developmentType;
+    document.getElementById('p2StyleStatus').textContent = s.styleStatus || '-';
+    document.getElementById('p2BU').textContent = s.bu || '-';
+
+    const isCarry = s.developmentType === 'CARRY OVER';
+    document.getElementById('refSeason').disabled = !isCarry;
+    document.getElementById('btnLoadReference').disabled = !isCarry;
+
+    const bom = (bomByStyle[s.id] || []).map(x => ({ ...x, included: x.usage > 15 }));
+
+    const bomTbody = document.getElementById('bomTbody');
+    bomTbody.innerHTML = bom.map(x => `
+      <tr>
+        <td class="mono">${escapeHtml(x.code)}</td>
+        <td>${escapeHtml(x.name)}</td>
+        <td>${escapeHtml(x.comp)}</td>
+        <td class="right">${x.usage}%</td>
+        <td>${x.included ? `<span class="badge new">YES</span>` : `<span class="badge">NO</span>`}</td>
+      </tr>
+    `).join('') || `<tr><td colspan="5" class="muted">No BOM data</td></tr>`;
+
+    const materials = bom.filter(x => x.included);
+    renderCareBlocks(s, materials);
+
+    const saveBox = document.getElementById('saveStatusBox');
+    if(state.labSaved && state.labSaved.styleId === s.id){
+      saveBox.innerHTML = `
+        <div class="notice info">
+          <div class="icon">✓</div>
+          <div class="txt">
+            บันทึกข้อมูลแล้ว: <span class="mono">${escapeHtml(state.labSaved.savedAt)}</span><br/>
+            Materials saved: <b>${state.labSaved.materials.length}</b>
+          </div>
+        </div>`;
+    }else{
+      saveBox.innerHTML = `
+        <div class="notice info">
+          <div class="icon">i</div>
+          <div class="txt">ยังไม่มีการบันทึกข้อมูล Care Label</div>
+        </div>`;
+    }
+
+    document.getElementById('careValidationBanner').classList.add('hidden');
+  }
+
+  function renderCareBlocks(style, materials){
+    const container = document.getElementById('careBlocks');
+    const saved = (state.labSaved && state.labSaved.styleId === style.id) ? state.labSaved : null;
+
+    container.innerHTML = materials.map(m => {
+      const savedCare = saved?.materials?.find(x => x.code === m.code)?.careIds || [];
+      const savedExtra = saved?.materials?.find(x => x.code === m.code)?.extraIds || [];
+
+      const groups = [...new Set(masterCare.map(c => c.group))];
+
+      const groupHtml = groups.map(g => {
+        const opts = masterCare.filter(c => c.group === g).map(c => {
+          const checked = savedCare.includes(c.id) ? 'checked' : '';
+          return `
+            <label style="display:flex; gap:8px; align-items:flex-start; padding:6px 0;">
+              <input type="checkbox" data-mcode="${m.code}" class="careChk" value="${c.id}" ${checked} style="margin-top:2px; width:auto;">
+              <div>
+                <div class="mono" style="font-size:12px; color:var(--text)">${escapeHtml(c.id)} - ${escapeHtml(c.label)}</div>
+                <div class="muted" style="font-size:11px;">Group: ${escapeHtml(g)}</div>
+              </div>
+            </label>`;
+        }).join('');
+
+        return `
+          <div style="padding:10px 12px; border:1px solid var(--line); border-radius:14px; background:var(--card2); margin-top:10px;">
+            <div class="muted" style="font-size:12px; font-weight:700; letter-spacing:.2px;">${escapeHtml(g)}</div>
+            <div>${opts || `<div class="muted">No items</div>`}</div>
+          </div>
+        `;
+      }).join('');
+
+      const extraOptions = masterExtra.map(e => {
+        const checked = savedExtra.includes(e.id) ? 'checked' : '';
+        return `
+          <label style="display:flex; gap:8px; align-items:center; padding:6px 0;">
+            <input type="checkbox" data-mcode="${m.code}" class="extraChk" value="${e.id}" ${checked} style="width:auto;">
+            <span>${escapeHtml(e.label)} <span class="muted mono">(${escapeHtml(e.id)})</span></span>
+          </label>`;
+      }).join('');
+
+      return `
+        <div class="card" style="margin-top:12px;">
+          <h3>
+            <span>Material: <span class="mono">${escapeHtml(m.code)}</span> — ${escapeHtml(m.name)}</span>
+            <span class="chip">Usage: <strong>${m.usage}%</strong></span>
+          </h3>
+          <div class="body">
+            <div class="row">
+              <span class="chip">Composition: <strong>${escapeHtml(m.comp)}</strong></span>
+            </div>
+
+            <div class="notice info" style="margin-top:10px;">
+              <div class="icon">i</div>
+              <div class="txt">ต้องเลือก Care Symbol อย่างน้อย <b>1 รายการต่อ Material</b> (Group ใช้ช่วยจัดระเบียบการเลือกเท่านั้น)</div>
+            </div>
+
+            ${groupHtml}
+
+            <div class="hr"></div>
+            <div>
+              <div class="muted" style="font-size:12px; font-weight:700; letter-spacing:.2px;">Extra Care Instruction (เลือกได้หลายรายการ)</div>
+              <div style="padding-top:6px;">${extraOptions}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('') || `
+      <div class="notice warn">
+        <div class="icon">!</div>
+        <div class="txt">ไม่มี Material ที่เข้าเงื่อนไขการคัดกรอง (Usage > 15% ใน Demo)</div>
+      </div>
+    `;
+  }
+
+  function validateCareSelections(materialCodes){
+    for (const code of materialCodes){
+      const selected = document.querySelectorAll(`.careChk[data-mcode="${code}"]:checked`);
+      if (selected.length < 1) return { ok:false, code };
+    }
+    return { ok:true };
+  }
+
+  function collectSelectionsForMaterials(materials){
+    return materials.map(m => {
+      const careIds = [...document.querySelectorAll('.careChk[data-mcode="' + m.code + '"]:checked')].map(x => x.value);
+      const extraIds = [...document.querySelectorAll('.extraChk[data-mcode="' + m.code + '"]:checked')].map(x => x.value);
+      return { code: m.code, name: m.name, comp: m.comp, usage: m.usage, careIds, extraIds };
+    });
+  }
+
+  // ------------------------------
+  // Page 3 Rendering + Logic (เดิม)
+  // ------------------------------
+  function renderPage3(){
+    const s = getSelectedStyle();
+    const hasSaved = state.labSaved && s && state.labSaved.styleId === s.id;
+
+    const noData = document.getElementById('p3NoData');
+    const content = document.getElementById('p3Content');
+
+    if(!s || !hasSaved){
+      noData.classList.remove('hidden');
+      content.classList.add('hidden');
+      return;
+    }
+
+    noData.classList.add('hidden');
+    content.classList.remove('hidden');
+
+    document.getElementById('p3StyleNo').textContent = s.styleNo;
+    document.getElementById('p3Season').textContent = s.season;
+    document.getElementById('p3DevType').textContent = s.developmentType;
+
+    const tbody = document.getElementById('p3CareTbody');
+    tbody.innerHTML = state.labSaved.materials.map(m => {
+      const careTxt = m.careIds.map(id => {
+        const item = masterCare.find(x => x.id === id);
+        return `${id} - ${item ? item.label : ''}`.trim();
+      }).join('<br/>') || '<span class="muted">-</span>';
+
+      const extraTxt = m.extraIds.map(id => {
+        const item = masterExtra.find(x => x.id === id);
+        return `${id} - ${item ? item.label : ''}`.trim();
+      }).join('<br/>') || '<span class="muted">-</span>';
+
+      return `
+        <tr>
+          <td class="mono">${escapeHtml(m.code)}</td>
+          <td>${escapeHtml(m.name)}</td>
+          <td>${escapeHtml(m.comp)}</td>
+          <td>${careTxt}</td>
+          <td>${extraTxt}</td>
+        </tr>
+      `;
+    }).join('');
+
+    updateP3ReadyBadge();
+  }
+
+  function updateP3ReadyBadge(){
+    const badge = document.getElementById('p3ReadyBadge');
+    const fiber = document.getElementById('fiberPosition')?.value?.trim() || '';
+    if(fiber){
+      badge.className = 'badge new';
+      badge.textContent = 'READY';
+    }else{
+      badge.className = 'badge changed';
+      badge.textContent = 'MISSING FIBER POSITION';
+    }
+  }
+
+  function validateBeforeGenerate(){
+    const fiber = document.getElementById('fiberPosition').value.trim();
+    if(!fiber){
+      return { ok:false, msg:'กรุณาระบุ Fiber Text Position ก่อนสร้างเอกสาร' };
+    }
+    return { ok:true };
+  }
+
+  // ------------------------------
+  // App Events (เดิม)
+  // ------------------------------
+  function bindAppEvents(){
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => setPage(btn.dataset.page));
+    });
+
+    document.getElementById('roleSelect').addEventListener('change', (e) => setRole(e.target.value));
+
+    document.getElementById('searchStyle').addEventListener('input', renderPage1);
+    document.getElementById('filterSeason').addEventListener('change', renderPage1);
+    document.getElementById('filterGender').addEventListener('change', renderPage1);
+    document.getElementById('filterDevType').addEventListener('change', renderPage1);
+    document.getElementById('filterStyleStatus').addEventListener('change', renderPage1);
+
+    document.getElementById('resetFilters').addEventListener('click', () => {
+      document.getElementById('searchStyle').value = '';
+      document.getElementById('filterSeason').value = '';
+      document.getElementById('filterGender').value = '';
+      document.getElementById('filterDevType').value = '';
+      document.getElementById('filterStyleStatus').value = '';
+      renderPage1();
+    });
+
+    document.getElementById('btnBackToP1').addEventListener('click', () => setPage('page1'));
+
+    document.getElementById('btnResetCare').addEventListener('click', () => {
+      document.querySelectorAll('.careChk:checked, .extraChk:checked').forEach(x => x.checked = false);
+      document.getElementById('careValidationBanner').classList.add('hidden');
+    });
+
+    document.getElementById('btnSaveCare').addEventListener('click', () => {
+      const s = getSelectedStyle();
+      if(!s) return;
+
+      const bom = (bomByStyle[s.id] || []).map(x => ({...x, included: x.usage > 15}));
+      const materials = bom.filter(x => x.included);
+
+      const validation = validateCareSelections(materials.map(m => m.code));
+      if(!validation.ok){
+        const banner = document.getElementById('careValidationBanner');
+        banner.classList.remove('hidden');
+        document.getElementById('careValidationText').textContent =
+          `Material ${validation.code} ยังไม่ได้เลือก Care Symbol อย่างน้อย 1 รายการ`;
+        banner.scrollIntoView({ behavior:'smooth', block:'center' });
+        return;
+      }
+
+      const payload = {
+        styleId: s.id,
+        materials: collectSelectionsForMaterials(materials),
+        carryRef: null,
+        savedAt: new Date().toLocaleString()
+      };
+
+      const refSeason = document.getElementById('refSeason').value;
+      if(s.developmentType === 'CARRY OVER' && refSeason){
+        payload.carryRef = { season: refSeason, mode: 'Reference (editable)' };
+      }
+
+      state.labSaved = payload;
+      logAudit(`LAB Saved Care Label for ${s.styleNo} (materials: ${payload.materials.length})`);
+      if(payload.carryRef) logAudit(`Carry Over Reference used: ${payload.carryRef.season}`);
+
+      renderPage2();
+      renderPage3();
+    });
+
+    document.getElementById('btnLoadReference').addEventListener('click', () => {
+      const s = getSelectedStyle();
+      if(!s) return;
+      const season = document.getElementById('refSeason').value;
+      if(!season){ alert('กรุณาเลือก Reference Season'); return; }
+
+      const bom = (bomByStyle[s.id] || []).map(x => ({...x, included: x.usage > 15}));
+      const materials = bom.filter(x => x.included);
+
+      document.querySelectorAll('.careChk:checked, .extraChk:checked').forEach(x => x.checked = false);
+
+      const ref = carryOverRef[season];
+      if(ref){
+        materials.forEach(m => {
+          (ref.careByMaterialCode[m.code] || []).forEach(id => {
+            const cb = document.querySelector(`.careChk[data-mcode="${m.code}"][value="${id}"]`);
+            if(cb) cb.checked = true;
+          });
+          (ref.extraByMaterialCode[m.code] || []).forEach(id => {
+            const cb = document.querySelector(`.extraChk[data-mcode="${m.code}"][value="${id}"]`);
+            if(cb) cb.checked = true;
+          });
+        });
+        logAudit(`Loaded Carry Over Reference for ${s.styleNo} from Season ${season}`);
+      }else{
+        alert('ไม่พบข้อมูลอ้างอิงของ Season นี้ (Demo)');
+      }
+    });
+
+    document.getElementById('fiberPosition').addEventListener('input', () => {
+      updateP3ReadyBadge();
+      document.getElementById('p3ValidationBanner').classList.add('hidden');
+    });
+
+    document.getElementById('btnPreviewPdf').addEventListener('click', () => {
+      const v = validateBeforeGenerate();
+      const banner = document.getElementById('p3ValidationBanner');
+      if(!v.ok){
+        banner.classList.remove('hidden');
+        document.getElementById('p3ValidationText').textContent = v.msg;
+        return;
+      }
+      document.getElementById('pdfResult').innerHTML = `
+        <div class="notice info">
+          <div class="icon">i</div>
+          <div class="txt">Preview PDF (Mock): ข้อมูลพร้อมสร้างเอกสาร — (Prototype ไม่ได้สร้างไฟล์จริง)</div>
+        </div>`;
+      logAudit('Preview AD PDF (Mock)');
+    });
+
+    document.getElementById('btnGeneratePdf').addEventListener('click', () => {
+      const v = validateBeforeGenerate();
+      const banner = document.getElementById('p3ValidationBanner');
+      if(!v.ok){
+        banner.classList.remove('hidden');
+        document.getElementById('p3ValidationText').textContent = v.msg;
+        return;
+      }
+      banner.classList.add('hidden');
+
+      const s = getSelectedStyle();
+      const fiber = document.getElementById('fiberPosition').value.trim();
+
+      document.getElementById('pdfResult').innerHTML = `
+        <div class="notice info">
+          <div class="icon">✓</div>
+          <div class="txt">
+            Generate AD PDF (Mock) สำเร็จ<br/>
+            Style: <span class="mono">${escapeHtml(s.styleNo)}</span><br/>
+            Fiber Text Position: <b>${escapeHtml(fiber)}</b>
+          </div>
+        </div>`;
+      logAudit(`Generated AD PDF (Mock) for ${s.styleNo}`);
+    });
+  }
+
+  // ------------------------------
+  // Init App (Run once after login)
+  // ------------------------------
+  let appInited = false;
+
+  function initAppOnce(){
+    if(appInited) return;
+    appInited = true;
+
+    bindAppEvents();
+
+    // role
+    setRole('LAB');
+    // first render
+    renderPage1();
+    renderAudit();
+
+    const originalSelectStyle = window.selectStyle;
+    window.selectStyle = function(styleId){
+      originalSelectStyle(styleId);
+      renderPage2();
+      renderPage3();
+    };
+
+    const _renderPage2 = renderPage2;
+    renderPage2 = function(){
+      _renderPage2();
+      const s = getSelectedStyle();
+      if(!s) return;
+      const isCarry = s.developmentType === 'CARRY OVER';
+      document.getElementById('refSeason').disabled = !isCarry;
+      document.getElementById('btnLoadReference').disabled = !isCarry;
+      if(!isCarry) document.getElementById('refSeason').value = '';
+    };
+  }
+
+  // Start on login screen
+
+  showLogin();
+</script>
+
+</body>
+</html>
