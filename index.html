@@ -491,6 +491,26 @@
       overflow: auto;
       min-height: 0;
     }
+
+    /* ✅ แสดงสัญลักษณ์ Wash */
+    .wash-symbol{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:10px;
+      padding:10px 12px;
+      border:1px dashed var(--line);
+      border-radius:14px;
+      background: var(--card2);
+    }
+    .wash-symbol .ico{
+      font-size:22px;
+      line-height:1;
+    }
+    .wash-symbol .txt{
+      font-size:12px;
+      color: var(--muted);
+    }
   </style>
 </head>
 
@@ -978,7 +998,7 @@ function showLogin(){
   const bomByStyle = {
     S1: [
       { code:'FAB-001', name:'Single Jersey', comp:'Cotton 60% / Polyester 40%', usage: 55 },
-      { code:'FAB-020', name:'Mesh Panel', comp:'Polyester 100%', usage: 22 },
+      { code:'FAB-020', name:'Mesh Panel', comp:'Cotton 60% / Polyester 40%', usage: 22 },
     ],
     S2: [
       { code:'FAB-002', name:'Interlock', comp:'Polyester 88% / Spandex 12%', usage: 68 },
@@ -986,15 +1006,19 @@ function showLogin(){
   };
 
   const masterCare = [
-    { id:'CW001', group:'Wash Instructions', label:'MACHINE WASH COLD' },
-    { id:'CW002', group:'Wash Instructions', label:'MACHINE WASH COLD GENTLE' },
-    { id:'CW005', group:'Wash Instructions', label:'HAND WASH' },
-    { id:'CB001', group:'Bleach Instructions', label:'ONLY NON-CHLORINE BLEACH WHEN NEEDED' },
-    { id:'CB002', group:'Bleach Instructions', label:'DO NOT BLEACH' },
-    { id:'CD001', group:'Dry Instructions', label:'TUMBLE DRY LOW' },
-    { id:'CD002', group:'Dry Instructions', label:'TUMBLE DRY MEDIUM' },
-    { id:'CD010', group:'Dry Instructions', label:'TUMBLE DRY HIGH' },
+  // ✅ Wash Instructions (มี symbol)
+  { id:'CW001', group:'Wash Instructions', label:'MACHINE WASH COLD',         symbol:'❄️' },
+  { id:'CW002', group:'Wash Instructions', label:'MACHINE WASH COLD GENTLE',  symbol:'🧺' },
+  { id:'CW005', group:'Wash Instructions', label:'HAND WASH',                 symbol:'🤲' },
+
+  // Bleach / Dry (ยังไม่ต้องมี symbol ก็ได้)
+  { id:'CB001', group:'Bleach Instructions', label:'ONLY NON-CHLORINE BLEACH WHEN NEEDED' },
+  { id:'CB002', group:'Bleach Instructions', label:'DO NOT BLEACH' },
+  { id:'CD001', group:'Dry Instructions',    label:'TUMBLE DRY LOW' },
+  { id:'CD002', group:'Dry Instructions',    label:'TUMBLE DRY MEDIUM' },
+  { id:'CD010', group:'Dry Instructions',    label:'TUMBLE DRY HIGH' },
   ];
+
   const masterExtra = [
     { id:'EC01', label:'DO NOT IRON ON PRINT' },
     { id:'EC02', label:'WASH WITH LIKE COLORS' },
@@ -1027,6 +1051,18 @@ function showLogin(){
   // ------------------------------
   // Helpers
   // ------------------------------
+  function renderWashSymbolHtml(careId){
+    if(!careId){
+      return `<div class="ico">🧺</div><div class="txt">ยังไม่ได้เลือก Wash Instructions</div>`;
+    }
+    const item = masterCare.find(x => x.id === careId);
+    const ico = item?.symbol || '🧺';
+    const txt = item?.label || careId;
+    return `<div class="ico">${ico}</div><div class="txt">${escapeHtml(txt)}</div>`;
+  }
+
+
+  
   function logAudit(msg){
     const t = new Date().toLocaleString();
     state.audit.unshift(`[${t}] ${msg}`);
@@ -1234,34 +1270,53 @@ function showLogin(){
   function renderCareBlocks(style, materials){
     const container = document.getElementById('careBlocks');
     const saved = (state.labSaved && state.labSaved.styleId === style.id) ? state.labSaved : null;
-
+  
     container.innerHTML = materials.map(m => {
       const savedCare = saved?.materials?.find(x => x.code === m.code)?.careIds || [];
       const savedExtra = saved?.materials?.find(x => x.code === m.code)?.extraIds || [];
-
+  
       const groups = [...new Set(masterCare.map(c => c.group))];
-
+  
+      // ✅ สร้าง dropdown ต่อ group (เลือกได้ 1 รายการ)
       const groupHtml = groups.map(g => {
-        const opts = masterCare.filter(c => c.group === g).map(c => {
-          const checked = savedCare.includes(c.id) ? 'checked' : '';
-          return `
-            <label style="display:flex; gap:8px; align-items:flex-start; padding:6px 0;">
-              <input type="checkbox" data-mcode="${m.code}" class="careChk" value="${c.id}" ${checked} style="margin-top:2px; width:auto;">
-              <div>
-                <div class="mono" style="font-size:12px; color:var(--text)">${escapeHtml(c.id)} - ${escapeHtml(c.label)}</div>
-                <div class="muted" style="font-size:11px;">Group: ${escapeHtml(g)}</div>
-              </div>
-            </label>`;
-        }).join('');
-
+        const options = masterCare
+          .filter(c => c.group === g)
+          .map(c => {
+            const selected = savedCare.includes(c.id) ? 'selected' : '';
+            return `<option value="${c.id}" ${selected}>${escapeHtml(c.label)} (${escapeHtml(c.id)})</option>`;
+          }).join('');
+  
+        // หา id ที่ถูกเลือกใน group นี้ (ถ้ามี)
+        const selectedIdInGroup =
+          savedCare.find(id => masterCare.find(x => x.id === id && x.group === g)?.id) || '';
+  
         return `
           <div style="padding:10px 12px; border:1px solid var(--line); border-radius:14px; background:var(--card2); margin-top:10px;">
             <div class="muted" style="font-size:12px; font-weight:700; letter-spacing:.2px;">${escapeHtml(g)}</div>
-            <div>${opts || `<div class="muted">No items</div>`}</div>
+  
+            <div class="row" style="margin-top:8px;">
+              <div class="field" style="min-width:320px;">
+                <label>เลือก 1 รายการ</label>
+                <select class="careSel" data-mcode="${escapeHtml(m.code)}" data-group="${escapeHtml(g)}">
+                  <option value="">-- เลือก --</option>
+                  ${options}
+                </select>
+              </div>
+  
+              ${
+                g === 'Wash Instructions'
+                ? `
+                  <div id="washSymbol_${escapeHtml(m.code)}" class="wash-symbol" style="flex:1; min-width:220px;">
+                    ${renderWashSymbolHtml(selectedIdInGroup)}
+                  </div>
+                `
+                : ''
+              }
+            </div>
           </div>
         `;
       }).join('');
-
+  
       const extraOptions = masterExtra.map(e => {
         const checked = savedExtra.includes(e.id) ? 'checked' : '';
         return `
@@ -1270,20 +1325,21 @@ function showLogin(){
             <span>${escapeHtml(e.label)} <span class="muted mono">(${escapeHtml(e.id)})</span></span>
           </label>`;
       }).join('');
-
+  
       return `
         <div class="card" style="margin-top:12px;">
           <h3>
             <span>Material: <span class="mono">${escapeHtml(m.code)}</span> — ${escapeHtml(m.name)}</span>
             <span class="chip">Usage: <strong>${m.usage}%</strong></span>
           </h3>
+  
           <div class="body">
             <div class="row">
               <span class="chip">Composition: <strong>${escapeHtml(m.comp)}</strong></span>
             </div>
-
+  
             ${groupHtml}
-
+  
             <div class="hr"></div>
             <div>
               <div class="muted" style="font-size:12px; font-weight:700; letter-spacing:.2px;">Extra Care Instruction (เลือกได้หลายรายการ)</div>
@@ -1300,10 +1356,12 @@ function showLogin(){
     `;
   }
 
+
   function validateCareSelections(materialCodes){
     for (const code of materialCodes){
-      const selected = document.querySelectorAll(`.careChk[data-mcode="${code}"]:checked`);
-      if (selected.length < 1) return { ok:false, code };
+      const selectedAny = [...document.querySelectorAll(`.careSel[data-mcode="${code}"]`)]
+        .some(sel => (sel.value || '').trim() !== '');
+      if(!selectedAny) return { ok:false, code };
     }
     return { ok:true };
   }
@@ -1311,8 +1369,13 @@ function showLogin(){
 
   function collectSelectionsForMaterials(materials){
     return materials.map(m => {
-      const careIds = [...document.querySelectorAll('.careChk[data-mcode="' + m.code + '"]:checked')].map(x => x.value);
-      const extraIds = [...document.querySelectorAll('.extraChk[data-mcode="' + m.code + '"]:checked')].map(x => x.value);
+      const careIds = [...document.querySelectorAll(`.careSel[data-mcode="${m.code}"]`)]
+        .map(sel => (sel.value || '').trim())
+        .filter(v => v !== '');
+  
+      const extraIds = [...document.querySelectorAll(`.extraChk[data-mcode="${m.code}"]:checked`)]
+        .map(x => x.value);
+  
       return { code: m.code, name: m.name, comp: m.comp, usage: m.usage, careIds, extraIds };
     });
   }
@@ -1540,6 +1603,21 @@ function showLogin(){
   
     document.getElementById('btnToggleSidebar')?.addEventListener('click', () => {
       document.body.classList.toggle('sidebar-collapsed');
+    });
+
+    // ✅ เมื่อเลือก dropdown ใน Wash Instructions ให้โชว์สัญลักษณ์ทันที
+    document.addEventListener('change', (e) => {
+      const sel = e.target;
+      if(!sel || !sel.classList || !sel.classList.contains('careSel')) return;
+    
+      const mcode = sel.dataset.mcode;
+      const group = sel.dataset.group;
+      if(group !== 'Wash Instructions') return;
+    
+      const box = document.getElementById(`washSymbol_${mcode}`);
+      if(!box) return;
+    
+      box.innerHTML = renderWashSymbolHtml(sel.value);
     });
   }
 
