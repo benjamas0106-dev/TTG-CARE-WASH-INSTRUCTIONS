@@ -1067,17 +1067,12 @@ function showLogin(){
   function filteredStyles(){
     const q = document.getElementById('searchStyle')?.value?.trim().toLowerCase() || '';
     const season = document.getElementById('filterSeason')?.value || '';
-    const gender = document.getElementById('filterGender')?.value || '';
     const devType = document.getElementById('filterDevType')?.value || '';
-    const styleStatus = document.getElementById('filterStyleStatus')?.value || '';
 
     return styles
-      .filter(s => s.stage === 'SMS')
       .filter(s => !q || (s.styleNo.toLowerCase().includes(q) || s.styleName.toLowerCase().includes(q)))
       .filter(s => !season || s.season === season)
-      .filter(s => !gender || s.gender === gender)
       .filter(s => !devType || s.developmentType === devType)
-      .filter(s => !styleStatus || s.styleStatus === styleStatus);
   }
 
   // ------------------------------
@@ -1411,9 +1406,7 @@ function showLogin(){
     document.getElementById('resetFilters')?.addEventListener('click', () => {
       const a = document.getElementById('searchStyle'); if(a) a.value = '';
       const b = document.getElementById('filterSeason'); if(b) b.value = '';
-      const c = document.getElementById('filterGender'); if(c) c.value = '';
       const d = document.getElementById('filterDevType'); if(d) d.value = '';
-      const e = document.getElementById('filterStyleStatus'); if(e) e.value = '';
       renderPage1();
     });
   
