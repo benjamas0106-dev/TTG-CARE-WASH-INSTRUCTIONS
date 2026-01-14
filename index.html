@@ -1150,11 +1150,12 @@
 
   function validateCareSelections(materialCodes){
     for (const code of materialCodes){
-      const selected = document.querySelectorAll(\`.careChk[data-mcode="\${code}"]:checked\`);
+      const selected = document.querySelectorAll(`.careChk[data-mcode="${code}"]:checked`);
       if (selected.length < 1) return { ok:false, code };
     }
     return { ok:true };
   }
+
 
   function collectSelectionsForMaterials(materials){
     return materials.map(m => {
