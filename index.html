@@ -34,10 +34,6 @@
     .sidebar-collapsed #appSidebar .sb-subtext,
     .sidebar-collapsed #appSidebar .sb-hide-when-collapsed{ display:none !important; }
     .sidebar-collapsed #appSidebar .sb-btn{ justify-content:center; }
-
-    html, body { height: 100%; }
-    body { min-height: 100vh; }
-
     
     .sb-brand{
       display:flex; align-items:center; gap:10px;
@@ -402,28 +398,37 @@
     .tiny{ font-size:11px; color: var(--muted); margin-top:10px; }
     
     /* ทำให้ container สูงเต็มจอและไม่เกิด scroll ซ้อนผิดที่ */
+    html, body{
+      height: 100%;
+      margin: 0;
+    }
+    body{
+      overflow: hidden;            /* กัน body scroll */
+    }
+    
+    /* shell สูงเต็มจอ */
     #appShell.app-shell{
       height: 100vh;
     }
     
-    /* content ด้านขวา */
+    /* content ด้านขวาสูงเต็มจอ */
     #appShell .app-content{
       flex: 1;
       min-width: 0;
       height: 100vh;
-      overflow: hidden;   /* ให้ scroll ไปอยู่ที่ #appMain */
+      overflow: hidden;            /* กัน scroll ซ้อน */
       display: flex;
       flex-direction: column;
     }
     
-    /* main ที่เป็น wrap เดิม: ให้เต็มกว้าง ไม่ auto center */
+    /* ให้ main เป็นพื้นที่ scroll และกินความสูงที่เหลือทั้งหมด */
     #appShell #appMain.wrap{
-      flex: 1;
-      width: 100%;
-      max-width: 100% !important; /* override .wrap เดิม */
-      margin: 0 !important;       /* override margin:auto */
+      flex: 1;                     /* กินพื้นที่แนวตั้งทั้งหมด */
+      height: 100%;                /* บังคับสูงเต็มใน container */
+      overflow: auto;              /* scroll อยู่ตรงนี้ */
+      max-width: 100% !important;
+      margin: 0 !important;
       padding: 16px;
-      overflow: auto;             /* scroll content ในพื้นที่นี้ */
     }
   </style>
 </head>
