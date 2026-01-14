@@ -537,12 +537,12 @@
 
     <div class="sb-nav">
       <button class="sb-btn active tab" data-page="page1">
-        <span class="sb-ico">1</span>
+        <!-- <span class="sb-ico">1</span> -->
         <span class="sb-text">Style Worklist</span>
       </button>
 
      <button class="sb-btn tab" data-page="page3">
-        <span class="sb-ico">3</span>
+        <!-- <span class="sb-ico">3</span> -->
         <span class="sb-text">Order Form</span>
      </button>
     </div>
@@ -649,7 +649,6 @@
           <div class="card">
             <h3>
               <span>Care & Wash Instructions</span>
-              <span class="chip">Role: <strong>LAB</strong></span>
             </h3>
             <div class="body">
     
@@ -664,21 +663,14 @@
                     <p class="section-title">Style Information</p>
                     <div class="row">
                       <span class="chip">Style No: <strong id="p2StyleNo">-</strong></span>
-                      <span class="chip">Style Name: <strong id="p2StyleName">-</strong></span>
                       <span class="chip">Season: <strong id="p2Season">-</strong></span>
-                      <span class="chip">Gender: <strong id="p2Gender">-</strong></span>
                       <span class="chip">Development Type: <strong id="p2DevType">-</strong></span>
-                      <span class="chip">Style Status: <strong id="p2StyleStatus">-</strong></span>
                       <span class="chip">Sport Category (BU): <strong id="p2BU">-</strong></span>
                     </div>
                   </div>
     
                   <div>
                     <p class="section-title">Carry Over (Reference)</p>
-                    <div class="notice warn" id="carryInfo">
-                      <div class="icon">!</div>
-                      <div class="txt">หาก Development Type = CARRY OVER สามารถอ้างอิง Season ก่อนหน้าเป็นค่าเริ่มต้นได้ (แก้ไขได้ก่อน Save)</div>
-                    </div>
                     <div class="row" style="margin-top:10px;">
                       <div class="field" style="min-width:220px;">
                         <label>Reference Season (เฉพาะ Carry Over)</label>
@@ -732,16 +724,6 @@
                   <button class="btn" id="btnSaveCare">Save (LAB)</button>
                 </div>
     
-              </div>
-            </div>
-          </div>
-    
-          <div class="card">
-            <h3>Save Status</h3>
-            <div class="body" id="saveStatusBox">
-              <div class="notice info">
-                <div class="icon">i</div>
-                <div class="txt">ยังไม่มีการบันทึกข้อมูล Care Label</div>
               </div>
             </div>
           </div>
@@ -1001,14 +983,10 @@ function showLogin(){
   const bomByStyle = {
     S1: [
       { code:'FAB-001', name:'Single Jersey', comp:'Cotton 60% / Polyester 40%', usage: 55 },
-      { code:'FAB-009', name:'Rib Collar', comp:'Cotton 95% / Spandex 5%', usage: 12 },
-      { code:'FAB-015', name:'Thread', comp:'Polyester 100%', usage: 4 },
       { code:'FAB-020', name:'Mesh Panel', comp:'Polyester 100%', usage: 22 },
     ],
     S2: [
       { code:'FAB-002', name:'Interlock', comp:'Polyester 88% / Spandex 12%', usage: 68 },
-      { code:'FAB-011', name:'Binding', comp:'Nylon 80% / Spandex 20%', usage: 9 },
-      { code:'FAB-021', name:'Inner Lining', comp:'Polyester 100%', usage: 18 },
     ],
   };
 
@@ -1313,11 +1291,6 @@ function showLogin(){
           <div class="body">
             <div class="row">
               <span class="chip">Composition: <strong>${escapeHtml(m.comp)}</strong></span>
-            </div>
-
-            <div class="notice info" style="margin-top:10px;">
-              <div class="icon">i</div>
-              <div class="txt">ต้องเลือก Care Symbol อย่างน้อย <b>1 รายการต่อ Material</b> (Group ใช้ช่วยจัดระเบียบการเลือกเท่านั้น)</div>
             </div>
 
             ${groupHtml}
