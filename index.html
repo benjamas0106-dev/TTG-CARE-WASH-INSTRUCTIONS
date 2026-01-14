@@ -492,15 +492,313 @@
   <!-- Content -->
   <div class="app-content">
     <main id="appMain" class="wrap">
-      <!-- (เอา section page1/page2/page3 เดิมของคุณมาวางไว้เหมือนเดิมทั้งหมด) -->
       <!-- PAGE 1 -->
-      <section id="page1"> ... ของเดิม ... </section>
+      <section id="page1"> <div class="cards">
+        <div class="card">
+          <h3>
+            <span>Style Worklist</span>
+            <span class="chip">Filter: <strong>Stage = SMS</strong></span>
+          </h3>
+          <div class="body">
+  
+            <div class="row">
+              <div class="field" style="min-width:220px">
+                <label>Search (Style No / Style Name)</label>
+                <input id="searchStyle" placeholder="เช่น RBK-SS26-001 / Runner Tee" />
+              </div>
+  
+              <div class="field">
+                <label>Season</label>
+                <select id="filterSeason">
+                  <option value="">All</option>
+                  <option>SS26</option>
+                  <option>FW25</option>
+                </select>
+              </div>
+  
+              <div class="field">
+                <label>Gender</label>
+                <select id="filterGender">
+                  <option value="">All</option>
+                  <option>Men</option>
+                  <option>Women</option>
+                  <option>Unisex</option>
+                </select>
+              </div>
+  
+              <div class="field">
+                <label>Development Type</label>
+                <select id="filterDevType">
+                  <option value="">All</option>
+                  <option>NEW STYLE</option>
+                  <option>CARRY OVER</option>
+                </select>
+              </div>
+  
+              <div class="field">
+                <label>Style Status (Reference)</label>
+                <select id="filterStyleStatus">
+                  <option value="">All</option>
+                  <option>IN RANGE</option>
+                  <option>DROP</option>
+                </select>
+              </div>
+  
+              <div class="spacer"></div>
+  
+              <button class="btn ghost" id="resetFilters">Reset</button>
+            </div>
+  
+            <div class="hr"></div>
+  
+            <div class="notice info">
+              <div class="icon">i</div>
+              <div class="txt">
+                แสดงเฉพาะรายการที่มี BOM อยู่ใน <span class="mono">Stage: SMS</span>.
+                <br/>Sport Category (BU) และ Style Status เป็นข้อมูลอ้างอิง — ไม่มีไม่ Block การทำงาน.
+              </div>
+            </div>
+  
+            <div style="margin-top:12px; overflow:auto; max-height: 520px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="min-width:70px">Style Image</th>
+                    <th style="min-width:120px">Style No</th>
+                    <th style="min-width:160px">Style Name</th>
+                    <th>Season</th>
+                    <th>Gender</th>
+                    <th>Base Size</th>
+                    <th style="min-width:160px">Product Name</th>
+                    <th style="min-width:110px">Style Status</th>
+                    <th>Stage</th>
+                    <th style="min-width:120px">Product Type</th>
+                    <th style="min-width:150px">Sport Category (BU)</th>
+                    <th style="min-width:130px">Buy Ready Date</th>
+                    <th style="min-width:110px">T1 Develop</th>
+                    <th style="min-width:140px">Development Type</th>
+                    <th style="min-width:140px">Status Indicator</th>
+                    <th class="right" style="min-width:110px">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="styleTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+  
+          <div class="card">
+            <h3>Selected Style (Context)</h3>
+            <div class="body" id="selectedStyleCard">
+              <div class="notice warn">
+                <div class="icon">!</div>
+                <div class="txt">ยังไม่ได้เลือก Style — เลือกจาก Worklist เพื่อไปทำงานต่อใน Page 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- PAGE 2 -->
-      <section id="page2" class="hidden"> ... ของเดิม ... </section>
+      <section id="page2" class="hidden"> <div class="cards">
+          <div class="card">
+            <h3>
+              <span>Style Detail & BOM (Stage: SMS)</span>
+              <span class="chip">Role: <strong>LAB</strong></span>
+            </h3>
+            <div class="body">
+    
+              <div id="p2NoStyle" class="notice warn">
+                <div class="icon">!</div>
+                <div class="txt">กรุณาเลือก Style จาก Page 1 ก่อน</div>
+              </div>
+    
+              <div id="p2Content" class="hidden">
+                <div class="split">
+                  <div>
+                    <p class="section-title">Style Information</p>
+                    <div class="row">
+                      <span class="chip">Style No: <strong id="p2StyleNo">-</strong></span>
+                      <span class="chip">Style Name: <strong id="p2StyleName">-</strong></span>
+                      <span class="chip">Season: <strong id="p2Season">-</strong></span>
+                      <span class="chip">Gender: <strong id="p2Gender">-</strong></span>
+                      <span class="chip">Development Type: <strong id="p2DevType">-</strong></span>
+                      <span class="chip">Style Status: <strong id="p2StyleStatus">-</strong></span>
+                      <span class="chip">Sport Category (BU): <strong id="p2BU">-</strong></span>
+                    </div>
+                    <div class="notice info" style="margin-top:10px;">
+                      <div class="icon">i</div>
+                      <div class="txt">
+                        BU และ Style Status ใช้เพื่อการอ้างอิงเท่านั้น (ไม่มีไม่ Block).<br/>
+                        Composition (%) แสดงตาม BOM (ไม่คำนวณ/ไม่ปรับค่า).
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div>
+                    <p class="section-title">Carry Over (Reference)</p>
+                    <div class="notice warn" id="carryInfo">
+                      <div class="icon">!</div>
+                      <div class="txt">หาก Development Type = CARRY OVER สามารถอ้างอิง Season ก่อนหน้าเป็นค่าเริ่มต้นได้ (แก้ไขได้ก่อน Save)</div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                      <div class="field" style="min-width:220px;">
+                        <label>Reference Season (เฉพาะ Carry Over)</label>
+                        <select id="refSeason" disabled>
+                          <option value="">-</option>
+                          <option value="SS25">SS25</option>
+                          <option value="FW24">FW24</option>
+                        </select>
+                      </div>
+                      <button class="btn secondary" id="btnLoadReference" disabled>Load Reference</button>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="hr"></div>
+    
+                <p class="section-title">BOM / Fabric (Filtered by LAB Formula - Demo)</p>
+                <div style="overflow:auto; max-height: 260px;">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th style="min-width:140px">Material Code</th>
+                        <th style="min-width:220px">Material Name</th>
+                        <th style="min-width:160px">Composition (%)</th>
+                        <th style="min-width:110px" class="right">Usage %</th>
+                        <th style="min-width:140px">Included?</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bomTbody"></tbody>
+                  </table>
+                </div>
+    
+                <div class="hr"></div>
+    
+                <div class="notice danger hidden" id="careValidationBanner">
+                  <div class="icon">!</div>
+                  <div class="txt" id="careValidationText">
+                    กรุณาเลือก Care Symbol อย่างน้อย 1 รายการสำหรับทุก Material ก่อนบันทึกข้อมูล
+                  </div>
+                </div>
+    
+                <p class="section-title" style="margin-top:10px;">Care Symbol & Extra Care Selection (ต่อ Material)</p>
+                <div id="careBlocks"></div>
+    
+                <div class="hr"></div>
+    
+                <div class="row">
+                  <button class="btn ghost" id="btnBackToP1">Back to Worklist</button>
+                  <div class="spacer"></div>
+                  <button class="btn secondary" id="btnResetCare">Reset Selections</button>
+                  <button class="btn" id="btnSaveCare">Save (LAB)</button>
+                </div>
+    
+              </div>
+            </div>
+          </div>
+    
+          <div class="card">
+            <h3>Save Status</h3>
+            <div class="body" id="saveStatusBox">
+              <div class="notice info">
+                <div class="icon">i</div>
+                <div class="txt">ยังไม่มีการบันทึกข้อมูล Care Label</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- PAGE 3 -->
-      <section id="page3" class="hidden"> ... ของเดิม ... </section>
+      <section id="page3" class="hidden"> <div class="cards">
+          <div class="card">
+            <h3>
+              <span>Purchasing Review & Generate Order Form (AD PDF)</span>
+              <span class="chip">Role: <strong>Purchasing</strong></span>
+            </h3>
+            <div class="body">
+    
+              <div id="p3NoData" class="notice warn">
+                <div class="icon">!</div>
+                <div class="txt">ต้องมีข้อมูลที่ LAB บันทึกก่อน จึงจะแสดงหน้านี้ได้ครบถ้วน</div>
+              </div>
+    
+              <div id="p3Content" class="hidden">
+                <p class="section-title">Style Summary</p>
+                <div class="row">
+                  <span class="chip">Style No: <strong id="p3StyleNo">-</strong></span>
+                  <span class="chip">Season: <strong id="p3Season">-</strong></span>
+                  <span class="chip">Development Type: <strong id="p3DevType">-</strong></span>
+                  <span class="chip">Supplier Doc: <strong>Order Form (AD PDF)</strong></span>
+                  <span class="spacer"></span>
+                  <span class="badge" id="p3ReadyBadge">READY</span>
+                </div>
+    
+                <div class="hr"></div>
+    
+                <p class="section-title">LAB Saved Care Label</p>
+                <div style="overflow:auto; max-height: 260px;">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th style="min-width:140px">Material Code</th>
+                        <th style="min-width:220px">Material Name</th>
+                        <th style="min-width:160px">Composition (%)</th>
+                        <th style="min-width:220px">Care Symbol (Selected)</th>
+                        <th style="min-width:220px">Extra Care (Selected)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="p3CareTbody"></tbody>
+                  </table>
+                </div>
+    
+                <div class="hr"></div>
+    
+                <div class="split">
+                  <div>
+                    <p class="section-title">Fiber Text Position (Purchasing Editable)</p>
+                    <div class="field">
+                      <label>Fiber Text Position</label>
+                      <input id="fiberPosition" placeholder="เช่น LEFT SIDE / NECK LABEL / HEM ..." />
+                    </div>
+                    <div class="notice info" style="margin-top:10px;">
+                      <div class="icon">i</div>
+                      <div class="txt">การแก้ไข Fiber Text Position ต้องไม่กระทบข้อมูลต้นทาง (Master BOM)</div>
+                    </div>
+                  </div>
+    
+                  <div>
+                    <p class="section-title">Generate</p>
+                    <div class="notice warn hidden" id="p3ValidationBanner">
+                      <div class="icon">!</div>
+                      <div class="txt" id="p3ValidationText"></div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                      <button class="btn secondary" id="btnPreviewPdf">Preview (Mock)</button>
+                      <button class="btn" id="btnGeneratePdf">Generate AD PDF (Mock)</button>
+                    </div>
+                    <div id="pdfResult" style="margin-top:12px;"></div>
+                  </div>
+                </div>
+    
+              </div>
+            </div>
+          </div>
+    
+          <div class="card">
+            <h3>Audit / History (Mock)</h3>
+            <div class="body">
+              <div class="notice info">
+                <div class="icon">i</div>
+                <div class="txt">บันทึกเหตุการณ์ (Save/Reference/Generate) จะถูกแสดงที่นี่เพื่อรองรับการตรวจสอบย้อนหลัง</div>
+              </div>
+              <div class="hr"></div>
+              <div id="auditLog" class="mono" style="font-size:12px; color:var(--muted); line-height:1.6;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>
