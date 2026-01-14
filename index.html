@@ -473,6 +473,24 @@
     #page1 .cards{
       grid-template-columns: 1fr !important;
     }
+
+    #page2 .cards{
+  grid-template-columns: 1fr !important;
+}    
+
+    /* ✅ Page2 เพิ่ม scrollbar ในเนื้อหา */
+    #page2{
+      height: 100%;
+      min-height: 0;
+    }
+    #page2 .card{
+      height: 100%;
+      min-height: 0;
+    }
+    #page2 .card .body{
+      overflow: auto;
+      min-height: 0;
+    }
   </style>
 </head>
 
@@ -1377,79 +1395,84 @@ function showLogin(){
     document.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => setPage(btn.dataset.page));
     });
-
-    document.getElementById('roleSelect').addEventListener('change', (e) => setRole(e.target.value));
-
-    document.getElementById('searchStyle').addEventListener('input', renderPage1);
-    document.getElementById('filterSeason').addEventListener('change', renderPage1);
-    document.getElementById('filterGender').addEventListener('change', renderPage1);
-    document.getElementById('filterDevType').addEventListener('change', renderPage1);
-    document.getElementById('filterStyleStatus').addEventListener('change', renderPage1);
-
-    document.getElementById('resetFilters').addEventListener('click', () => {
-      document.getElementById('searchStyle').value = '';
-      document.getElementById('filterSeason').value = '';
-      document.getElementById('filterGender').value = '';
-      document.getElementById('filterDevType').value = '';
-      document.getElementById('filterStyleStatus').value = '';
+  
+    document.getElementById('roleSelect')?.addEventListener('change', (e) => setRole(e.target.value));
+  
+    document.getElementById('searchStyle')?.addEventListener('input', renderPage1);
+    document.getElementById('filterSeason')?.addEventListener('change', renderPage1);
+  
+    // ✅ อันนี้คือข้อ 2: DevType ต้องทำงาน
+    document.getElementById('filterDevType')?.addEventListener('change', renderPage1);
+  
+    // ✅ กันพัง: บางตัวไม่มีใน HTML ก็ไม่ error
+    document.getElementById('filterGender')?.addEventListener('change', renderPage1);
+    document.getElementById('filterStyleStatus')?.addEventListener('change', renderPage1);
+  
+    document.getElementById('resetFilters')?.addEventListener('click', () => {
+      const a = document.getElementById('searchStyle'); if(a) a.value = '';
+      const b = document.getElementById('filterSeason'); if(b) b.value = '';
+      const c = document.getElementById('filterGender'); if(c) c.value = '';
+      const d = document.getElementById('filterDevType'); if(d) d.value = '';
+      const e = document.getElementById('filterStyleStatus'); if(e) e.value = '';
       renderPage1();
     });
-
-    document.getElementById('btnBackToP1').addEventListener('click', () => setPage('page1'));
-
-    document.getElementById('btnResetCare').addEventListener('click', () => {
+  
+    document.getElementById('btnBackToP1')?.addEventListener('click', () => setPage('page1'));
+  
+    document.getElementById('btnResetCare')?.addEventListener('click', () => {
       document.querySelectorAll('.careChk:checked, .extraChk:checked').forEach(x => x.checked = false);
-      document.getElementById('careValidationBanner').classList.add('hidden');
+      document.getElementById('careValidationBanner')?.classList.add('hidden');
     });
-
-    document.getElementById('btnSaveCare').addEventListener('click', () => {
+  
+    document.getElementById('btnSaveCare')?.addEventListener('click', () => {
       const s = getSelectedStyle();
       if(!s) return;
-
+  
       const bom = (bomByStyle[s.id] || []).map(x => ({...x, included: x.usage > 15}));
       const materials = bom.filter(x => x.included);
-
+  
       const validation = validateCareSelections(materials.map(m => m.code));
       if(!validation.ok){
         const banner = document.getElementById('careValidationBanner');
-        banner.classList.remove('hidden');
+        banner?.classList.remove('hidden');
         document.getElementById('careValidationText').textContent =
           `Material ${validation.code} ยังไม่ได้เลือก Care Symbol อย่างน้อย 1 รายการ`;
-        banner.scrollIntoView({ behavior:'smooth', block:'center' });
+        banner?.scrollIntoView({ behavior:'smooth', block:'center' });
         return;
       }
-
+  
       const payload = {
         styleId: s.id,
         materials: collectSelectionsForMaterials(materials),
         carryRef: null,
         savedAt: new Date().toLocaleString()
       };
-
-      const refSeason = document.getElementById('refSeason').value;
+  
+      const refSeason = document.getElementById('refSeason')?.value || '';
       if(s.developmentType === 'CARRY OVER' && refSeason){
         payload.carryRef = { season: refSeason, mode: 'Reference (editable)' };
       }
-
+  
       state.labSaved = payload;
       logAudit(`LAB Saved Care Label for ${s.styleNo} (materials: ${payload.materials.length})`);
       if(payload.carryRef) logAudit(`Carry Over Reference used: ${payload.carryRef.season}`);
-
+  
       renderPage2();
       renderPage3();
     });
-
-    document.getElementById('btnLoadReference').addEventListener('click', () => {
+  
+    document.getElementById('btnLoadReference')?.addEventListener('click', () => {
       const s = getSelectedStyle();
       if(!s) return;
-      const season = document.getElementById('refSeason').value;
+  
+      const season = document.getElementById('refSeason')?.value || '';
       if(!season){ alert('กรุณาเลือก Reference Season'); return; }
-
+  
       const bom = (bomByStyle[s.id] || []).map(x => ({...x, included: x.usage > 15}));
       const materials = bom.filter(x => x.included);
-
+  
       document.querySelectorAll('.careChk:checked, .extraChk:checked').forEach(x => x.checked = false);
-
+  
       const ref = carryOverRef[season];
       if(ref){
         materials.forEach(m => {
@@ -1467,17 +1490,17 @@ function showLogin(){
         alert('ไม่พบข้อมูลอ้างอิงของ Season นี้ (Demo)');
       }
     });
-
-    document.getElementById('fiberPosition').addEventListener('input', () => {
+  
+    document.getElementById('fiberPosition')?.addEventListener('input', () => {
       updateP3ReadyBadge();
-      document.getElementById('p3ValidationBanner').classList.add('hidden');
+      document.getElementById('p3ValidationBanner')?.classList.add('hidden');
     });
-
-    document.getElementById('btnPreviewPdf').addEventListener('click', () => {
+  
+    document.getElementById('btnPreviewPdf')?.addEventListener('click', () => {
       const v = validateBeforeGenerate();
       const banner = document.getElementById('p3ValidationBanner');
       if(!v.ok){
-        banner.classList.remove('hidden');
+        banner?.classList.remove('hidden');
         document.getElementById('p3ValidationText').textContent = v.msg;
         return;
       }
@@ -1488,20 +1511,20 @@ function showLogin(){
         </div>`;
       logAudit('Preview AD PDF (Mock)');
     });
-
-    document.getElementById('btnGeneratePdf').addEventListener('click', () => {
+  
+    document.getElementById('btnGeneratePdf')?.addEventListener('click', () => {
       const v = validateBeforeGenerate();
       const banner = document.getElementById('p3ValidationBanner');
       if(!v.ok){
-        banner.classList.remove('hidden');
+        banner?.classList.remove('hidden');
         document.getElementById('p3ValidationText').textContent = v.msg;
         return;
       }
-      banner.classList.add('hidden');
-
+      banner?.classList.add('hidden');
+  
       const s = getSelectedStyle();
-      const fiber = document.getElementById('fiberPosition').value.trim();
-
+      const fiber = document.getElementById('fiberPosition')?.value?.trim() || '';
+  
       document.getElementById('pdfResult').innerHTML = `
         <div class="notice info">
           <div class="icon">✓</div>
@@ -1513,13 +1536,12 @@ function showLogin(){
         </div>`;
       logAudit(`Generated AD PDF (Mock) for ${s.styleNo}`);
     });
-
-    // Logout (เพิ่มให้ใช้งานจริง)
-       document.getElementById('btnLogout')?.addEventListener('click', () => {
+  
+    // ✅ ข้อ 1: Logout จะทำงานแน่นอน เพราะ event bind ไม่พังแล้ว
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
       showLogin();
     });
-
-    // Toggle Sidebar (ย่อ/ขยาย)
+  
     document.getElementById('btnToggleSidebar')?.addEventListener('click', () => {
       document.body.classList.toggle('sidebar-collapsed');
     });
