@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TTG25058 - Order Form MMP AD REEBOK (Prototype)</title>
+  <title>TTG-CARE&WASH INSTRUCTIONS</title>
+
   <style>
     :root{
       /* Light theme */
@@ -347,7 +348,6 @@
       <div class="logo" aria-hidden="true"></div>
       <div class="title">
         <b>TTG-CARE&WASH INSTRUCTIONS</b>
-        <!-- <span>Prototype UI (LAB / Purchasing) • Single-file HTML</span> -->
       </div>
     </div>
 
@@ -685,7 +685,9 @@
 </main>
 
 <script>
-  // เปลี่ยน user/pass ตรงนี้ได้เลย
+'use strict';
+
+  // เปลี่ยน user/pass ตรงนี้ได้เลย (Prototype)
   const AUTH = { username: 'admin', password: '1234' };
 
   function showLoginError(show){
@@ -712,8 +714,6 @@
   function doLogin(e){
     if(e) e.preventDefault();
 
-    console.log('Login clicked'); // <-- เช็คว่ากดแล้วเข้าไหม
-
     const u = (document.getElementById('loginUsername')?.value || '').trim();
     const p = (document.getElementById('loginPassword')?.value || '').trim();
 
@@ -726,23 +726,20 @@
     }
   }
 
-  // bind events (พออันเดียว)
-   document.addEventListener('DOMContentLoaded', () => {
+  // bind events
+  document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('btnLogin');
     if(!btn){
-      console.error('❌ ไม่พบปุ่ม #btnLogin (เช็ค id ใน HTML)');
       return;
     }
     btn.addEventListener('click', doLogin);
 
     document.getElementById('loginUsername')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(e); });
     document.getElementById('loginPassword')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(e); });
-
-    console.log('✅ Login events bound');
   });
 
   // ------------------------------
-  // Mock Data (เดิม)
+  // Mock Data
   // ------------------------------
   const state = {
     role: 'LAB',
@@ -860,7 +857,7 @@
   };
 
   // ------------------------------
-  // Helpers (เดิม)
+  // Helpers
   // ------------------------------
   function logAudit(msg){
     const t = new Date().toLocaleString();
@@ -917,7 +914,7 @@
   }
 
   // ------------------------------
-  // Page 1 Rendering (เดิม)
+  // Page 1 Rendering
   // ------------------------------
   function renderPage1(){
     const tbody = document.getElementById('styleTbody');
@@ -1004,7 +1001,7 @@
   window.goToPage3 = function(){ setPage('page3'); }
 
   // ------------------------------
-  // Page 2 Rendering + Logic (เดิม)
+  // Page 2 Rendering + Logic
   // ------------------------------
   function renderPage2(){
     const s = getSelectedStyle();
@@ -1144,7 +1141,7 @@
 
   function validateCareSelections(materialCodes){
     for (const code of materialCodes){
-      const selected = document.querySelectorAll(`.careChk[data-mcode="${code}"]:checked`);
+      const selected = document.querySelectorAll(\`.careChk[data-mcode="\${code}"]:checked\`);
       if (selected.length < 1) return { ok:false, code };
     }
     return { ok:true };
@@ -1159,7 +1156,7 @@
   }
 
   // ------------------------------
-  // Page 3 Rendering + Logic (เดิม)
+  // Page 3 Rendering + Logic
   // ------------------------------
   function renderPage3(){
     const s = getSelectedStyle();
@@ -1228,7 +1225,7 @@
   }
 
   // ------------------------------
-  // App Events (เดิม)
+  // App Events
   // ------------------------------
   function bindAppEvents(){
     document.querySelectorAll('.tab').forEach(btn => {
@@ -1370,6 +1367,11 @@
         </div>`;
       logAudit(`Generated AD PDF (Mock) for ${s.styleNo}`);
     });
+
+    // Logout (เพิ่มให้ใช้งานจริง)
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
+      showLogin();
+    });
   }
 
   // ------------------------------
@@ -1409,7 +1411,6 @@
   }
 
   // Start on login screen
-
   showLogin();
 </script>
 
