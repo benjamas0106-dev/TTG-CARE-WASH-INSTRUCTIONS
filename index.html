@@ -692,10 +692,21 @@
   window.doLogin = doLogin;
   window.showApp = showApp;
   
-  function showLoginError(show){
-    const el = document.getElementById('loginError');
-    if(!el) return;
-    el.classList.toggle('hidden', !show);
+ function showLoginError(show, msg){
+  const el = document.getElementById('loginError');
+  if(!el) return;
+  
+  // อัปเดตข้อความ
+  const txt = el.querySelector('.txt');
+  if(txt) txt.textContent = msg || 'ไม่สามารถเข้าใช้งานได้';
+  
+  // แสดง/ซ่อน
+  el.classList.toggle('hidden', !show);
+  
+  // ถ้าแสดง ให้เลื่อนมาเห็นชัด ๆ
+  if(show){
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
   }
   
   function showApp(){
@@ -713,18 +724,27 @@
     if(pw) pw.value = '';
   }
   
-  function doLogin(e){
+ function doLogin(e){
     if(e) e.preventDefault();
+  
+    // เคลียร์แจ้งเตือนก่อนทุกครั้ง
+    showLoginError(false);
   
     const u = (document.getElementById('loginUsername')?.value || '').trim();
     const p = (document.getElementById('loginPassword')?.value || '').trim();
+  
+    // กันกรณีกรอกไม่ครบ
+    if(!u || !p){
+      showLoginError(true, 'กรุณากรอก Username และ Password');
+      return;
+    }
   
     if(u === AUTH.username && p === AUTH.password){
       showLoginError(false);
       showApp();
       if(typeof initAppOnce === 'function') initAppOnce();
     }else{
-      showLoginError(true);
+      showLoginError(true, 'Username หรือ Password ไม่ถูกต้อง');
     }
   }
   
